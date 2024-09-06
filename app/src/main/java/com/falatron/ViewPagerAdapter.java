@@ -19,12 +19,12 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         switch (position) {
+            default:
+                return new TtsFragment();
             case 1:
                 return new RvcFragment();
             case 2:
                 return new MenuFragment();
-            default:
-                return new TtsFragment();
         }
     }
 

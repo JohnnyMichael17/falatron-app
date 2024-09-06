@@ -129,13 +129,13 @@ public class RvcFragment extends Fragment {
                 binding.txtNome,
                 binding.txtAutor,
                 binding.txtDublador,
-                binding.cardModel
+                binding.cardViewModel
         );
 
         voiceList.choiceVoice();
 
         audioCompartilhado();
-        clearCache();
+        //clearCache();
 
         outputFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath() + "/recording.mp3";
 

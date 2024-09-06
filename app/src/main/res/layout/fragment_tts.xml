@@ -99,7 +99,7 @@
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/cardVoz" />
+                app:layout_constraintTop_toBottomOf="@+id/cardViewModel" />
 
             <TextView
                 android:id="@+id/txtContadorDeCaracteres"
@@ -130,7 +130,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/edtInsiraTexto" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardVoz"
+                android:id="@+id/cardViewModel"
                 android:layout_width="340dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
@@ -270,7 +270,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/btnGerarAudio">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cardMediaPlayer"
                     android:layout_width="match_parent"
                     android:layout_height="58dp"
                     android:background="@drawable/bg_mediaplayer">

@@ -89,7 +89,7 @@
                 app:backgroundTint="@null"
                 app:icon="@drawable/baseline_send_24"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/cardModel" />
+                app:layout_constraintTop_toBottomOf="@+id/cardViewModel" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGravarAudio"
@@ -104,12 +104,12 @@
                 android:textSize="15sp"
                 app:backgroundTint="@null"
                 app:icon="@drawable/baseline_mic_24"
-                app:iconTint="@color/black"
+                app:iconTint="@color/white"
                 app:layout_constraintEnd_toEndOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@+id/btnEnviarAudio" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardUserAudio"
+                android:id="@+id/cardViewUserAudio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
@@ -121,7 +121,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/txtValor">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cardUserMediaPlayer"
+                    android:id="@+id/cardViewUserMP"
                     android:layout_width="match_parent"
                     android:layout_height="58dp"
                     android:background="@drawable/bg_mediaplayer">
@@ -204,7 +204,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/loadingProgressBar" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardModel"
+                android:id="@+id/cardViewModel"
                 android:layout_width="340dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
@@ -344,7 +344,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/btnGerarAudioRvc">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cardMediaPlayer"
                     android:layout_width="match_parent"
                     android:layout_height="58dp"
                     android:background="@drawable/bg_mediaplayer">
@@ -439,9 +438,9 @@
                 android:layout_marginTop="25dp"
                 android:indeterminate="true"
                 android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@+id/cardUserAudio"
-                app:layout_constraintStart_toStartOf="@+id/cardUserAudio"
-                app:layout_constraintTop_toBottomOf="@+id/cardUserAudio" />
+                app:layout_constraintEnd_toEndOf="@+id/cardViewUserAudio"
+                app:layout_constraintStart_toStartOf="@+id/cardViewUserAudio"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewUserAudio" />
 
             <TextView
                 android:id="@+id/txtQueue"
@@ -453,8 +452,8 @@
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@+id/cardUserAudio"
-                app:layout_constraintTop_toBottomOf="@+id/cardUserAudio" />
+                app:layout_constraintStart_toStartOf="@+id/cardViewUserAudio"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewUserAudio" />
 
             <TextView
                 android:layout_width="wrap_content"

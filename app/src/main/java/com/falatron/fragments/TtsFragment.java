@@ -98,7 +98,7 @@ public class TtsFragment extends Fragment {
                 binding.txtNome,
                 binding.txtAutor,
                 binding.txtDublador,
-                binding.cardVoz
+                binding.cardViewModel
         );
 
         voiceList.choiceVoice();
@@ -256,7 +256,7 @@ public class TtsFragment extends Fragment {
         } else {
             binding.btnGerarAudio.setVisibility(View.GONE);
             //loadingProgressBar.setVisibility(View.VISIBLE);
-            binding.cardMediaPlayer.setVisibility(View.GONE);
+            binding.cardViewMP.setVisibility(View.GONE);
 
             new Thread(new Runnable() {
                 @Override

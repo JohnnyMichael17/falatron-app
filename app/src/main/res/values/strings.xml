@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ViewPager</string>
+    <string name="app_name">Falatron</string>
     <string name="gravar_audio">Gravar\náudio</string>
     <string name="enviar_audio">Enviar\náudio</string>
     <string name="gerar_audio">Gerar áudio</string>
