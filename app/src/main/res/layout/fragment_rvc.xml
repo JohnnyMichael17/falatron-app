@@ -25,6 +25,20 @@
             android:layout_height="wrap_content"
             android:background="@color/backgroundColor2">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
             <TextView
                 android:id="@+id/txtConversao"
                 android:layout_width="wrap_content"
@@ -34,62 +48,62 @@
                 android:text="@string/conversao_de_fala_em_fala"
                 android:textColor="@color/white"
                 android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
                 android:id="@+id/spinnerCategoria"
-                style="@style/spinner_categoria"
-                android:layout_width="340dp"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.492"
-                app:layout_constraintStart_toStartOf="parent"
+                android:background="@drawable/bg_spinner"
+                android:minHeight="48dp"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/txtConversao" />
 
             <Spinner
                 android:id="@+id/spinnerVoz"
-                android:layout_width="340dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_spinner"
                 android:minHeight="48dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toEndOf="@+id/spinnerCategoria"
                 app:layout_constraintStart_toStartOf="@+id/spinnerCategoria"
                 app:layout_constraintTop_toBottomOf="@+id/spinnerCategoria" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEnviarAudio"
-                android:layout_width="132dp"
-                android:layout_height="62dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bg_selected_button"
                 android:fontFamily="@font/comfortaa_semi_bold"
                 android:text="@string/enviar_audio"
                 android:textAllCaps="false"
                 android:textColor="@color/text_color_selected"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 app:backgroundTint="@null"
                 app:icon="@drawable/baseline_send_24"
-                app:layout_constraintStart_toStartOf="@+id/spinnerVoz"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/cardModel" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGravarAudio"
-                android:layout_width="132dp"
-                android:layout_height="62dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/bg_selected_button"
                 android:fontFamily="@font/comfortaa_semi_bold"
+                android:paddingHorizontal="30dp"
                 android:text="@string/gravar_audio"
                 android:textAllCaps="false"
                 android:textColor="@color/text_color_selected"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 app:backgroundTint="@null"
                 app:icon="@drawable/baseline_mic_24"
-                app:layout_constraintEnd_toEndOf="@+id/spinnerVoz"
+                app:layout_constraintEnd_toEndOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@+id/btnEnviarAudio" />
 
             <androidx.cardview.widget.CardView
@@ -97,12 +111,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
-                android:layout_marginTop="150dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="50dp"
                 android:backgroundTint="@color/backgroundColor"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnEnviarAudio">
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/txtValor">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cardUserMediaPlayer"
@@ -173,18 +187,18 @@
 
             <Button
                 android:id="@+id/btnGerarAudioRvc"
-                android:layout_width="116dp"
-                android:layout_height="56dp"
-                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bg_selected_button"
                 android:fontFamily="@font/comfortaa_semi_bold"
                 android:text="@string/gerar_audio"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 app:backgroundTint="@null"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/loadingProgressBar" />
 
             <androidx.cardview.widget.CardView
@@ -446,7 +460,7 @@
                 android:fontFamily="@font/comfortaa_bold"
                 android:text="@string/ou"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@+id/btnEnviarAudio"
                 app:layout_constraintEnd_toStartOf="@+id/btnGravarAudio"
                 app:layout_constraintStart_toEndOf="@+id/btnEnviarAudio"
@@ -460,7 +474,7 @@
                 android:fontFamily="@font/comfortaa_light"
                 android:text="@string/transposicao_de_nota"
                 android:textColor="@color/white"
-                app:layout_constraintStart_toStartOf="@+id/btnEnviarAudio"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/btnEnviarAudio" />
 
             <SeekBar
@@ -473,7 +487,7 @@
                 android:progressTint="@color/white"
                 android:thumbTint="@color/white"
                 app:layout_constraintEnd_toEndOf="@+id/txtTransposicao"
-                app:layout_constraintStart_toStartOf="@+id/txtTransposicao"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/txtTransposicao" />
 
             <TextView
@@ -484,7 +498,7 @@
                 android:fontFamily="@font/comfortaa_light"
                 android:text="@string/valor"
                 android:textColor="@color/white"
-                app:layout_constraintStart_toStartOf="@+id/seekBarPitch"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/seekBarPitch" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -497,6 +511,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
     </FrameLayout>
 
     <FrameLayout
@@ -506,5 +521,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

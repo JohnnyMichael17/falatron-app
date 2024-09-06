@@ -33,7 +33,6 @@ import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -100,6 +99,7 @@ public class RvcFragment extends Fragment {
 
     private MediaRecorder mediaRecorder;
     private String outputFile;
+    private boolean isRecording = false;
 
     private boolean isPlaying = false;
     private boolean isMuted = false;
@@ -144,7 +144,7 @@ public class RvcFragment extends Fragment {
 
         outputFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath() + "/recording.mp3";
 
-        binding.btnGravarAudio.setOnTouchListener(new View.OnTouchListener() {
+        /*binding.btnGravarAudio.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -160,6 +160,23 @@ public class RvcFragment extends Fragment {
                         break;
                 }
                 return true;
+            }
+        });*/
+
+        binding.btnGravarAudio.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            @Override
+            public void onClick(View v) {
+                if (isRecording) {
+                    binding.btnGravarAudio.setIcon(getResources().getDrawable(R.drawable.baseline_square_24, null));
+                    binding.btnGravarAudio.setText(R.string.parar_de_gravar);
+                    startRecording();
+                } else {
+                    binding.btnGravarAudio.setIcon(getResources().getDrawable(R.drawable.baseline_mic_24, null));
+                    binding.btnGravarAudio.setText(R.string.gravar_audio);
+                    stopRecording();
+                }
+                isRecording = !isRecording;
             }
         });
 

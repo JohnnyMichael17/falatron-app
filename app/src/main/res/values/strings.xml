@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ViewPager</string>
-    <string name="gravar_audio">Gravar áudio</string>
-    <string name="enviar_audio">Enviar áudio</string>
+    <string name="gravar_audio">Gravar\náudio</string>
+    <string name="enviar_audio">Enviar\náudio</string>
     <string name="gerar_audio">Gerar áudio</string>
     <string name="nome">Nome:</string>
     <string name="autor">Autor:</string>
@@ -34,4 +34,5 @@
     <string name="avalie_nosso_aplicativo">Avalie nosso aplicativo</string>
     <string name="conversao_de_texto_em_fala">Conversão de texto em fala</string>
     <string name="conversao_de_fala_em_fala">Conversão de fala em fala</string>
+    <string name="parar_de_gravar">Parar\\nde\\ngravar</string>
 </resources>
