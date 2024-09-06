@@ -25,7 +25,7 @@ public class MenuFragment extends Fragment {
     private FragmentMenuBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMenuBinding.inflate(getLayoutInflater(), container, false);
         return binding.getRoot();
     }
@@ -94,6 +94,8 @@ public class MenuFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        // Configurar os elementos do toolbar
         ImageButton imageButton = requireActivity().findViewById(R.id.btnMenu);
         Drawable iconDrawable = imageButton.getDrawable();
         iconDrawable.setColorFilter(ContextCompat.getColor(requireContext(), R.color.blue), PorterDuff.Mode.SRC_IN);
@@ -110,6 +112,7 @@ public class MenuFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+
         // Configurar os elementos do toolbar
         ImageButton imageButton = requireActivity().findViewById(R.id.btnMenu);
         Drawable iconDrawable = imageButton.getDrawable();
@@ -124,7 +127,6 @@ public class MenuFragment extends Fragment {
         view.setLayoutParams(params);
     }
 
-    //------ Método para abrir um Link Externo ------//
     private void openLinkInBrowser(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);

@@ -33,7 +33,7 @@
                 app:layout_constraintGuide_percent="0.02" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline1"
+                android:id="@+id/guideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -58,7 +58,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/text_menu_color"
                 android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@id/glTop" />
 
             <ImageView
@@ -79,8 +79,8 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"
                 android:background="@android:color/holo_blue_light"
-                app:layout_constraintEnd_toEndOf="@id/guideline1"
-                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
+                app:layout_constraintStart_toStartOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/btnPatreon" />
 
             <Button
@@ -95,7 +95,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/text_menu_color"
                 android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/view"
                 tools:layout_editor_absoluteX="5dp" />
 
@@ -117,7 +117,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"
                 android:background="@android:color/holo_blue_light"
-                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="@id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/btnDiscord" />
 
@@ -175,7 +175,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/text_menu_color"
                 android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/view2" />
 
             <ImageView
@@ -196,7 +196,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"
                 android:background="@android:color/holo_blue_light"
-                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="@id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/btnYouTube" />
 
@@ -213,7 +213,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/text_menu_color"
                 android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/view4" />
 
             <ImageView
@@ -234,7 +234,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"
                 android:background="@android:color/holo_blue_light"
-                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="@id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/btnTikTok" />
 
@@ -251,7 +251,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/text_menu_color"
                 android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/view5" />
 
             <ImageView
@@ -272,7 +272,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"
                 android:background="@android:color/holo_blue_light"
-                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="@id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/btnReddit" />
 
@@ -289,7 +289,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/text_menu_color"
                 android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/view6" />
 
             <ImageView
@@ -310,7 +310,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"
                 android:background="@android:color/holo_blue_light"
-                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="@id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/btnFalatron" />
 
@@ -327,7 +327,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/text_menu_color"
                 android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/btnFalatron" />
 
             <ImageView
@@ -348,7 +348,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"
                 android:background="@android:color/holo_blue_light"
-                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="@id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/btnCompartilhe" />
 
@@ -365,7 +365,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/text_menu_color"
                 android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/btnCompartilhe" />
 
             <ImageView
@@ -386,7 +386,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"
                 android:background="@android:color/holo_blue_light"
-                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="@id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/btnAvalie" />
 

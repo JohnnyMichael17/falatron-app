@@ -13,6 +13,7 @@
         app:layout_constraintBottom_toTopOf="parent" />
 
     <ScrollView
+        android:id="@id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/anuncio02"
@@ -46,7 +47,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/comfortaa_bold"
                 android:text="@string/conversao_de_fala_em_fala"
-                android:textColor="@color/white"
+                android:textColor="@color/textColor"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/guideline"
@@ -79,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/bg_selected_button"
+                android:background="@drawable/bg_selected"
                 android:fontFamily="@font/comfortaa_semi_bold"
                 android:text="@string/enviar_audio"
                 android:textAllCaps="false"
@@ -94,7 +95,7 @@
                 android:id="@+id/btnGravarAudio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_selected_button"
+                android:background="@drawable/bg_selected"
                 android:fontFamily="@font/comfortaa_semi_bold"
                 android:paddingHorizontal="30dp"
                 android:text="@string/gravar_audio"
@@ -103,6 +104,7 @@
                 android:textSize="15sp"
                 app:backgroundTint="@null"
                 app:icon="@drawable/baseline_mic_24"
+                app:iconTint="@color/black"
                 app:layout_constraintEnd_toEndOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@+id/btnEnviarAudio" />
 
@@ -122,14 +124,14 @@
                     android:id="@+id/cardUserMediaPlayer"
                     android:layout_width="match_parent"
                     android:layout_height="58dp"
-                    android:background="@drawable/bg_mediaplayer_card">
+                    android:background="@drawable/bg_mediaplayer">
 
                     <Button
                         android:id="@+id/btnUserPlay"
                         android:layout_width="27dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="10dp"
-                        android:background="@drawable/bg_play_button"
+                        android:background="@drawable/bg_play"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -165,7 +167,7 @@
                         android:layout_width="27dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="20dp"
-                        android:background="@drawable/bg_pause_button"
+                        android:background="@drawable/bg_pause"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -190,7 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/bg_selected_button"
+                android:background="@drawable/bg_selected"
                 android:fontFamily="@font/comfortaa_semi_bold"
                 android:text="@string/gerar_audio"
                 android:textAllCaps="false"
@@ -329,7 +331,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardMP"
+                android:id="@+id/cardViewMP"
                 android:layout_width="320dp"
                 android:layout_height="58dp"
                 android:layout_marginStart="50dp"
@@ -345,14 +347,14 @@
                     android:id="@+id/cardMediaPlayer"
                     android:layout_width="match_parent"
                     android:layout_height="58dp"
-                    android:background="@drawable/bg_mediaplayer_card">
+                    android:background="@drawable/bg_mediaplayer">
 
                     <Button
                         android:id="@+id/btnPlay"
                         android:layout_width="27dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="10dp"
-                        android:background="@drawable/bg_play_button"
+                        android:background="@drawable/bg_play"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -386,7 +388,7 @@
                         android:layout_width="27dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="20dp"
-                        android:background="@drawable/bg_pause_button"
+                        android:background="@drawable/bg_pause"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -459,7 +461,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/comfortaa_bold"
                 android:text="@string/ou"
-                android:textColor="@color/white"
+                android:textColor="@color/textColor"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@+id/btnEnviarAudio"
                 app:layout_constraintEnd_toStartOf="@+id/btnGravarAudio"
@@ -473,7 +475,7 @@
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/comfortaa_light"
                 android:text="@string/transposicao_de_nota"
-                android:textColor="@color/white"
+                android:textColor="@color/textColor"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/btnEnviarAudio" />
 
@@ -497,10 +499,19 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/comfortaa_light"
                 android:text="@string/valor"
-                android:textColor="@color/white"
+                android:textColor="@color/textColor"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/seekBarPitch" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="70dp"
+                android:background="@color/backgroundColor2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewMP" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
