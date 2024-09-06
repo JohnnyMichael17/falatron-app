@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor2">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/anuncio02"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/anuncio01">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundColor2">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/glTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.02" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.01" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.99" />
+
+            <Button
+                android:id="@+id/btnPatreon"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/comfortaa_bold"
+                android:gravity="start|center_vertical"
+                android:padding="2dp"
+                android:text="@string/patreon"
+                android:textAllCaps="false"
+                android:textColor="@color/text_menu_color"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintTop_toTopOf="@id/glTop" />
+
+            <ImageView
+                android:id="@+id/icPatreon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="2dp"
+                android:background="@drawable/ic_patreon"
+                app:layout_constraintBottom_toBottomOf="@+id/btnPatreon"
+                app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/btnPatreon" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:background="@android:color/holo_blue_light"
+                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:layout_constraintTop_toBottomOf="@+id/btnPatreon" />
+
+            <Button
+                android:id="@+id/btnDiscord"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/comfortaa_bold"
+                android:gravity="start|center_vertical"
+                android:padding="2dp"
+                android:text="@string/discord"
+                android:textAllCaps="false"
+                android:textColor="@color/text_menu_color"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintTop_toBottomOf="@+id/view"
+                tools:layout_editor_absoluteX="5dp" />
+
+            <ImageView
+                android:id="@+id/icDiscord"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_discord"
+                app:layout_constraintBottom_toBottomOf="@+id/btnDiscord"
+                app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/btnDiscord"
+                tools:layout_editor_absoluteX="355dp" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:background="@android:color/holo_blue_light"
+                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/btnDiscord" />
+
+            <Button
+                android:id="@+id/btnTwitter"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/comfortaa_bold"
+                android:gravity="start|center_vertical"
+                android:padding="2dp"
+                android:text="@string/twitter"
+                android:textAllCaps="false"
+                android:textColor="@color/text_menu_color"
+                android:textSize="15sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/view2"
+                app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+            <ImageView
+                android:id="@+id/icTwitter"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="2dp"
+                android:background="@drawable/ic_twitter"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/btnTwitter"
+                app:layout_constraintEnd_toEndOf="@+id/view2"
+                app:layout_constraintTop_toTopOf="@+id/btnTwitter" />
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:background="@android:color/holo_blue_light"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnTwitter" />
+
+            <Button
+                android:id="@+id/btnYouTube"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/comfortaa_bold"
+                android:gravity="start|center_vertical"
+                android:padding="2dp"
+                android:text="@string/youtube"
+                android:textAllCaps="false"
+                android:textColor="@color/text_menu_color"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+            <ImageView
+                android:id="@+id/icYouTube"
+                android:layout_width="30dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="2dp"
+                android:background="@drawable/ic_youtube"
+                app:layout_constraintBottom_toBottomOf="@+id/btnYouTube"
+                app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/btnYouTube" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:background="@android:color/holo_blue_light"
+                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/btnYouTube" />
+
+            <Button
+                android:id="@+id/btnTikTok"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/comfortaa_bold"
+                android:gravity="start|center_vertical"
+                android:padding="2dp"
+                android:text="@string/tiktok"
+                android:textAllCaps="false"
+                android:textColor="@color/text_menu_color"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintTop_toBottomOf="@+id/view4" />
+
+            <ImageView
+                android:id="@+id/icTikTok"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="2dp"
+                android:background="@drawable/ic_tiktok"
+                app:layout_constraintBottom_toBottomOf="@+id/btnTikTok"
+                app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/btnTikTok" />
+
+            <View
+                android:id="@+id/view5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:background="@android:color/holo_blue_light"
+                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/btnTikTok" />
+
+            <Button
+                android:id="@+id/btnReddit"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/comfortaa_bold"
+                android:gravity="start|center_vertical"
+                android:padding="2dp"
+                android:text="@string/reddit"
+                android:textAllCaps="false"
+                android:textColor="@color/text_menu_color"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintTop_toBottomOf="@+id/view5" />
+
+            <ImageView
+                android:id="@+id/icReddit"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="2dp"
+                android:background="@drawable/ic_reddit"
+                app:layout_constraintBottom_toBottomOf="@+id/btnReddit"
+                app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/btnReddit" />
+
+            <View
+                android:id="@+id/view6"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:background="@android:color/holo_blue_light"
+                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/btnReddit" />
+
+            <Button
+                android:id="@+id/btnFalatron"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/comfortaa_bold"
+                android:gravity="start|center_vertical"
+                android:padding="2dp"
+                android:text="@string/site_falatron"
+                android:textAllCaps="false"
+                android:textColor="@color/text_menu_color"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+            <ImageView
+                android:id="@+id/icFalatron"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="2dp"
+                android:background="@drawable/ic_falatron"
+                app:layout_constraintBottom_toBottomOf="@+id/btnFalatron"
+                app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/btnFalatron" />
+
+            <View
+                android:id="@+id/view7"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:background="@android:color/holo_blue_light"
+                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/btnFalatron" />
+
+            <Button
+                android:id="@+id/btnCompartilhe"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/comfortaa_bold"
+                android:gravity="start|center_vertical"
+                android:padding="2dp"
+                android:text="@string/compatilhe"
+                android:textAllCaps="false"
+                android:textColor="@color/text_menu_color"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintTop_toBottomOf="@+id/btnFalatron" />
+
+            <ImageView
+                android:id="@+id/icCompartilhe"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="2dp"
+                android:background="@drawable/baseline_assessment_24"
+                app:layout_constraintBottom_toBottomOf="@+id/btnAvalie"
+                app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/btnAvalie" />
+
+            <View
+                android:id="@+id/view8"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:background="@android:color/holo_blue_light"
+                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/btnCompartilhe" />
+
+            <Button
+                android:id="@+id/btnAvalie"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/comfortaa_bold"
+                android:gravity="start|center_vertical"
+                android:padding="2dp"
+                android:text="@string/avalie_nosso_aplicativo"
+                android:textAllCaps="false"
+                android:textColor="@color/text_menu_color"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintTop_toBottomOf="@+id/btnCompartilhe" />
+
+            <ImageView
+                android:id="@+id/icAvalie"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="2dp"
+                android:background="@drawable/ic_compartilhe"
+                app:layout_constraintBottom_toBottomOf="@+id/btnCompartilhe"
+                app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/btnCompartilhe" />
+
+            <View
+                android:id="@+id/view9"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:background="@android:color/holo_blue_light"
+                app:layout_constraintEnd_toEndOf="@id/guideline1"
+                app:layout_constraintStart_toStartOf="@id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/btnAvalie" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/anuncio01"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/anuncio02"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

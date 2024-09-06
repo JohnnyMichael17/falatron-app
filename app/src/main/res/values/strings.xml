@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">ViewPager</string>
+    <string name="gravar_audio">Gravar áudio</string>
+    <string name="enviar_audio">Enviar áudio</string>
+    <string name="gerar_audio">Gerar áudio</string>
+    <string name="nome">Nome:</string>
+    <string name="autor">Autor:</string>
+    <string name="dublador_original">Dublador(a) Original:</string>
+    <string name="valor">Valor: 0</string>
+    <string name="insira_o_texto_limite_de_300_caracteres">Insira o texto… Limite de 300 caracteres</string>
+    <string name="contador_de_caracteres">0 / 300</string>
+    <string name="ou">ou</string>
+    <string name="falatron_um_aplicativo_de_conversao_de_texto_para_fala_usando_inteligencia_artificial_feito_para_geracao_de_conteudo_distribuido_livremente">Falatron é um aplicativo de conversão de texto para fala usando inteligência artificial, feito para geração de conteúdo distribuído livremente.</string>
+    <string name="nao_e_permitido_uso_comercial_das_vozes_encontradas_no_aplicativo">Não é permitido uso comercial das vozes encontradas no aplicativo.</string>
+    <string name="todas_as_vozes_no_aplicativo_apesar_de_muito_semelhantes_sao_imitacoes_feitas_por_inteligencia_artificial_nenhum_dos_audios_entregues_aos_usuarios_sao_realmente_da_voz_original">Todas as vozes no aplicativo, apesar de muito semelhantes, são imitações feitas por inteligência artificial, nenhum dos áudios entregues aos usuários são realmente da voz original.</string>
+    <string name="todos_os_audios_gerados_sao_de_completa_responsabilidade_do_usuario_fake_news_ofensas_e_afins_sao_estritamente_proibidas_e_voce_sera_apontado_responsavel_caso_utilizar_para_isso">Todos os áudios gerados são de completa responsabilidade do usuário. Fake news, ofensas e afins são estritamente proíbidas e você será apontado responsável caso utilizar para isso.</string>
+    <string name="qualquer_pedido_de_permissao_de_voz_feita_por_terceiros_nao_nos_representam_nao_serao_validos_e_nao_possuem_associacao_com_o_aplicativo">Qualquer pedido de permissão de voz feita por terceiros não nos representam, não serão válidos, e não possuem associação com o aplicativo.</string>
+    <string name="ok">OK</string>
+    <string name="termos_de_servico">Termos de Serviço</string>
+    <string name="caso_alguma_voz_de_sua_propriedade_esteja_no_aplicativo_sem_permiss_o_nos_encaminhe_um_e_mail_e_iremos_remov_la">Caso alguma voz de sua propriedade esteja no aplicativo sem permissão, nos encaminhe um e-mail e iremos removê-la.</string>
+    <string name="n_o_temos_inten_o_de_prejudicar_a_ind_stria_da_dublagem_ou_a_imagem_pessoal_de_ningu_m">Não temos intenção de prejudicar a indústria da dublagem ou a imagem pessoal de ninguém.</string>
+    <string name="caso_houver_alguma_voz_de_sua_propriedade_envie_um_email_para_falatron_com_gmail_com_e_iremos_remover_a_voz_imediatamente">Caso houver alguma voz de sua propriedade envie um email para: falatron.com@gmail.com e iremos remover a voz imediatamente.</string>
+    <string name="se_poss_vel_credite_o_falatron_em_projetos_onde_o_mesmo_utilizado_a_divulga_o_nos_ajuda_a_manter_os_servidores_para_que_continuemos_funcionando_de_forma_gratuita">Se possível credite o Falatron em projetos onde o mesmo é utilizado. A divulgação nos ajuda a manter os servidores para que continuemos funcionando de forma gratuita.</string>
+    <string name="pronto_pressione_ok">Pronto, pressione OK.</string>
+    <string name="transposicao_de_nota">Transposição de nota:</string>
+    <string name="patreon">Patreon</string>
+    <string name="discord">Discord</string>
+    <string name="youtube">Youtube</string>
+    <string name="twitter">Twitter</string>
+    <string name="tiktok">Tik Tok</string>
+    <string name="reddit">Reddit</string>
+    <string name="site_falatron">Site Falatron</string>
+    <string name="compatilhe">Compatilhe</string>
+    <string name="avalie_nosso_aplicativo">Avalie nosso aplicativo</string>
+    <string name="conversao_de_texto_em_fala">Conversão de texto em fala</string>
+    <string name="conversao_de_fala_em_fala">Conversão de fala em fala</string>
+</resources>
