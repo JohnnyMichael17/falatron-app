@@ -5,7 +5,6 @@ import android.Manifest;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -25,9 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE = 200;
 
-    private ViewPager2 viewPager;
-    private ViewPagerAdapter viewPagerAdapter;
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,28 +35,27 @@ public class MainActivity extends AppCompatActivity {
 
         solicitarPermissoes();
 
-        viewPager = findViewById(R.id.viewPager);
-        viewPagerAdapter = new ViewPagerAdapter(this);
-        viewPager.setAdapter(viewPagerAdapter);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this);
+        binding.viewPager.setAdapter(viewPagerAdapter);
 
         binding.toolbar.btnTts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewPager.setCurrentItem(0);
+                binding.viewPager.setCurrentItem(0);
             }
         });
 
         binding.toolbar.btnRvc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewPager.setCurrentItem(1);
+                binding.viewPager.setCurrentItem(1);
             }
         });
 
         binding.toolbar.btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewPager.setCurrentItem(2);
+                binding.viewPager.setCurrentItem(2);
             }
         });
 

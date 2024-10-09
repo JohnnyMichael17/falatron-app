@@ -75,134 +75,6 @@
                 app:layout_constraintStart_toStartOf="@+id/spinnerCategoria"
                 app:layout_constraintTop_toBottomOf="@+id/spinnerCategoria" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnEnviarAudio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_selected"
-                android:fontFamily="@font/comfortaa_semi_bold"
-                android:text="@string/enviar_audio"
-                android:textAllCaps="false"
-                android:textColor="@color/text_color_selected"
-                android:textSize="15sp"
-                app:backgroundTint="@null"
-                app:icon="@drawable/baseline_send_24"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/cardViewModel" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnGravarAudio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_selected"
-                android:fontFamily="@font/comfortaa_semi_bold"
-                android:paddingHorizontal="30dp"
-                android:text="@string/gravar_audio"
-                android:textAllCaps="false"
-                android:textColor="@color/text_color_selected"
-                android:textSize="15sp"
-                app:backgroundTint="@null"
-                app:icon="@drawable/baseline_mic_24"
-                app:iconTint="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/btnEnviarAudio" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewUserAudio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="50dp"
-                android:backgroundTint="@color/backgroundColor"
-                app:layout_constraintEnd_toEndOf="@id/guideline2"
-                app:layout_constraintStart_toStartOf="@id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/txtValor">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cardViewUserMP"
-                    android:layout_width="match_parent"
-                    android:layout_height="58dp"
-                    android:background="@drawable/bg_mediaplayer">
-
-                    <Button
-                        android:id="@+id/btnUserPlay"
-                        android:layout_width="27dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/bg_play"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <Button
-                        android:id="@+id/btnUserVolumeOn"
-                        android:layout_width="27dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/baseline_volume_up_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/userAudioSeekBar"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/userAudioSeekBar"
-                        app:layout_constraintTop_toTopOf="@+id/userAudioSeekBar"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <Button
-                        android:id="@+id/btnUserVolumeOff"
-                        android:layout_width="27dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/baseline_volume_off_24"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="@+id/userAudioSeekBar"
-                        app:layout_constraintStart_toEndOf="@+id/userAudioSeekBar"
-                        app:layout_constraintTop_toTopOf="@+id/userAudioSeekBar"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <Button
-                        android:id="@+id/userPauseButton"
-                        android:layout_width="27dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="20dp"
-                        android:background="@drawable/bg_pause"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <SeekBar
-                        android:id="@+id/userAudioSeekBar"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:progress="0"
-                        app:layout_constraintBottom_toBottomOf="@+id/btnUserPlay"
-                        app:layout_constraintStart_toEndOf="@+id/btnUserPlay"
-                        app:layout_constraintTop_toTopOf="@+id/btnUserPlay" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <Button
-                android:id="@+id/btnGerarAudioRvc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bg_selected"
-                android:fontFamily="@font/comfortaa_semi_bold"
-                android:text="@string/gerar_audio"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                app:backgroundTint="@null"
-                app:layout_constraintEnd_toEndOf="@id/guideline2"
-                app:layout_constraintStart_toStartOf="@id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/loadingProgressBar" />
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewModel"
                 android:layout_width="340dp"
@@ -235,7 +107,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
-                            android:id="@+id/imgIcLogo"
+                            android:id="@+id/imageIcLogo"
                             android:layout_width="96dp"
                             android:layout_height="86dp"
                             android:layout_marginStart="5dp"
@@ -329,6 +201,135 @@
                 </HorizontalScrollView>
 
             </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEnviarAudio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_selected"
+                android:fontFamily="@font/comfortaa_semi_bold"
+                android:text="@string/enviar_audio"
+                android:textAllCaps="false"
+                android:textColor="@color/text_color_selected"
+                android:textSize="15sp"
+                app:backgroundTint="@null"
+                app:icon="@drawable/baseline_send_24"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewModel" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGravarAudio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_selected"
+                android:fontFamily="@font/comfortaa_semi_bold"
+                android:paddingHorizontal="30dp"
+                android:text="@string/gravar_audio"
+                android:textAllCaps="false"
+                android:textColor="@color/text_color_selected"
+                android:textSize="15sp"
+                app:backgroundTint="@null"
+                app:icon="@drawable/baseline_mic_24"
+                app:iconTint="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/btnEnviarAudio" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewUserAudio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="50dp"
+                android:visibility="gone"
+                android:backgroundTint="@color/backgroundColor"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/txtValor">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cardViewUserMP"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:background="@drawable/bg_mediaplayer">
+
+                    <Button
+                        android:id="@+id/btnUserPlay"
+                        android:layout_width="27dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/bg_play"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+                    <Button
+                        android:id="@+id/btnUserVolumeOn"
+                        android:layout_width="27dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/baseline_volume_up_24"
+                        app:layout_constraintBottom_toBottomOf="@+id/userAudioSeekBar"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/userAudioSeekBar"
+                        app:layout_constraintTop_toTopOf="@+id/userAudioSeekBar"
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+                    <Button
+                        android:id="@+id/btnUserVolumeOff"
+                        android:layout_width="27dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/baseline_volume_off_24"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/userAudioSeekBar"
+                        app:layout_constraintStart_toEndOf="@+id/userAudioSeekBar"
+                        app:layout_constraintTop_toTopOf="@+id/userAudioSeekBar"
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+                    <Button
+                        android:id="@+id/btnUserPause"
+                        android:layout_width="27dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="20dp"
+                        android:background="@drawable/bg_pause"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <SeekBar
+                        android:id="@+id/userAudioSeekBar"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:progress="0"
+                        app:layout_constraintBottom_toBottomOf="@+id/btnUserPlay"
+                        app:layout_constraintStart_toEndOf="@+id/btnUserPlay"
+                        app:layout_constraintTop_toTopOf="@+id/btnUserPlay" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/btnGerarAudioRvc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_selected"
+                android:fontFamily="@font/comfortaa_semi_bold"
+                android:text="@string/gerar_audio"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:backgroundTint="@null"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/loadingProgressBar" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewMP"

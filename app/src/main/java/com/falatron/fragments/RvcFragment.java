@@ -30,6 +30,7 @@ import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -58,7 +59,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.io.OutputStream;
 import java.util.concurrent.ExecutionException;
 
 public class RvcFragment extends Fragment {
@@ -80,7 +81,6 @@ public class RvcFragment extends Fragment {
     private ValueAnimator progressAnimator;
 
     private MediaRecorder mediaRecorder;
-    private String outputFile;
     private boolean isRecording = false;
 
     private boolean isPlaying = false;
@@ -97,7 +97,7 @@ public class RvcFragment extends Fragment {
         return binding.getRoot();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -123,6 +123,7 @@ public class RvcFragment extends Fragment {
         voiceList = new VoiceList(
                 this,
                 requireContext(),
+                "https://falatron.com/static/sovits.json",
                 binding.spinnerCategoria,
                 binding.spinnerVoz,
                 binding.imageModel,
@@ -134,10 +135,7 @@ public class RvcFragment extends Fragment {
 
         voiceList.choiceVoice();
 
-        audioCompartilhado();
-        //clearCache();
-
-        outputFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath() + "/recording.mp3";
+        //audioCompartilhado();
 
         /*binding.btnGravarAudio.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -214,7 +212,7 @@ public class RvcFragment extends Fragment {
             }
         });
 
-        binding.userPauseButton.setOnClickListener(new View.OnClickListener() {
+        binding.btnUserPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -332,7 +330,7 @@ public class RvcFragment extends Fragment {
         binding.btnCompartilhar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareAudio(base64Audio);
+                shareAudio();
             }
         });
     }
@@ -376,15 +374,17 @@ public class RvcFragment extends Fragment {
     private void gerarAudio() {
         AlertMessage alertMessage = new AlertMessage(requireContext());
 
-        if (!binding.spinnerCategoria.isSelected()) {
+        if ("Selecione a categoria...".equals(binding.spinnerCategoria.getSelectedItem().toString())) {
             alertMessage.mostrarAlertaCategoria();
-        } else if (!binding.spinnerVoz.isSelected()) {
+        } else if ("Selecione a voz...".equals(binding.spinnerVoz.getSelectedItem().toString())) {
             alertMessage.mostrarAlertaVoz();
-        } else if (!isCacheEmpty()) {
-            mostrarAlertaAudio();
         } else if (!voiceList.testInternet()) {
             alertMessage.mostrarAlertaInternet();
         } else {
+            binding.btnGerarAudioRvc.setVisibility(View.GONE);
+            binding.loadingProgressBar.setVisibility(View.VISIBLE);
+            binding.cardViewMP.setVisibility(View.GONE);
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -393,7 +393,7 @@ public class RvcFragment extends Fragment {
 
                     String responseString;
                     try {
-                        responseString = apiPostTask.execute("https://falatron.com/api/app/rvc/", binding.spinnerVoz.toString(), selectedValue, upload).get();
+                        responseString = apiPostTask.execute("https://falatron.com/api/app/rvc/", binding.spinnerVoz.getSelectedItem().toString(), selectedValue, upload).get();
 
                     } catch (ExecutionException | InterruptedException e) {
                         throw new RuntimeException(e);
@@ -419,7 +419,10 @@ public class RvcFragment extends Fragment {
                 try {
                     selectedAudio.setDataSource(requireContext(), userAudio);
                     selectedAudio.prepare();
-                    upload = createTempAudio(userAudio);
+
+                    binding.cardViewUserAudio.setVisibility(View.VISIBLE);
+
+                    upload = saveAudioToCache(userAudio);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -427,8 +430,26 @@ public class RvcFragment extends Fragment {
         }
     }
 
-    private void audioCompartilhado() {
-        Intent intent = getActivity().getIntent();
+    private File saveAudioToCache(Uri audioUri) throws IOException {
+        File cacheFile = new File(requireContext().getCacheDir(), "upload.mp3");
+
+        InputStream inputStream = requireContext().getContentResolver().openInputStream(audioUri);
+        OutputStream outputStream = new FileOutputStream(cacheFile);
+
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = inputStream.read(buffer)) > 0) {
+            outputStream.write(buffer, 0, length);
+        }
+
+        inputStream.close();
+        outputStream.close();
+
+        return cacheFile;
+    }
+
+    /*private void audioCompartilhado() {
+        Intent intent = requireActivity().getIntent();
         String action = intent.getAction();
         String type = intent.getType();
 
@@ -450,10 +471,11 @@ public class RvcFragment extends Fragment {
                 }
             }
         }
-    }
+    }*/
 
     private void startRecording() {
-        audioFilePath = getActivity().getCacheDir() + "/upload.mp3";
+        audioFilePath = requireContext().getExternalCacheDir().getAbsolutePath() + "/upload.3gp";
+
         mediaRecorder = new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -475,36 +497,22 @@ public class RvcFragment extends Fragment {
             mediaRecorder.release();
             mediaRecorder = null;
 
+            selectedAudio = new MediaPlayer();
+
             try {
+                selectedAudio.setDataSource(audioFilePath);
+                selectedAudio.prepare();
+
+                binding.cardViewUserAudio.setVisibility(View.VISIBLE);
+
                 Uri audioUri = Uri.fromFile(new File(audioFilePath));
-                upload = createTempAudio(audioUri);
+                upload = saveAudioToCache(audioUri);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             Toast.makeText(requireContext(), "Gravação finalizada", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private File createTempAudio(Uri uri) throws IOException {
-        InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
-        if (inputStream == null) {
-            throw new IOException("Não foi possível abrir InputStream do URI");
-        }
-
-        File tempFile = File.createTempFile("audio", ".mp3", getActivity().getCacheDir());
-        FileOutputStream outputStream = new FileOutputStream(tempFile);
-
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = inputStream.read(buffer)) > 0) {
-            outputStream.write(buffer, 0, length);
-        }
-
-        outputStream.close();
-        inputStream.close();
-
-        return new File(tempFile.getParent(), "upload.mp3");
     }
 
     private void downloadAudio() {
@@ -515,7 +523,7 @@ public class RvcFragment extends Fragment {
             //String fileName = text_box.getText().toString().toLowerCase().replace(" ", "_") + ".mp3";
             File file = new File(path, "download.mp3");
 
-            final NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+            final NotificationManager notificationManager = (NotificationManager) requireActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 
             if (file.exists()) {
 
@@ -530,7 +538,7 @@ public class RvcFragment extends Fragment {
                             outputStream.write(audioData);
                             outputStream.close();
                             DownloadNotification.showDownloadNotification(requireContext(), file.getAbsolutePath());
-                            Toast.makeText(getActivity().getApplicationContext(), "Áudio baixado com sucesso!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireActivity().getApplicationContext(), "Áudio baixado com sucesso!", Toast.LENGTH_SHORT).show();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -552,7 +560,7 @@ public class RvcFragment extends Fragment {
                 outputStream.write(audioData);
                 outputStream.close();
                 DownloadNotification.showDownloadNotification(requireContext(), file.getAbsolutePath());
-                Toast.makeText(getActivity().getApplicationContext(), "Áudio baixado com sucesso!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity().getApplicationContext(), "Áudio baixado com sucesso!", Toast.LENGTH_SHORT).show();
 
             }
         } catch (IOException e) {
@@ -560,10 +568,9 @@ public class RvcFragment extends Fragment {
         }
     }
 
-    //------ Método para compartilhar o áudio com outros Aplicativos ------//
-    public void shareAudio(String base64Audio) {
-        File tempAudioFile = new File(getActivity().getFilesDir(), "temp_audio.mp3");
-        Uri audioUri = FileProvider.getUriForFile(requireContext(), getActivity().getPackageName() + ".fileprovider", tempAudioFile);
+    public void shareAudio() {
+        File tempAudioFile = new File(requireActivity().getFilesDir(), "temp_audio.mp3");
+        Uri audioUri = FileProvider.getUriForFile(requireContext(), requireActivity().getPackageName() + ".fileprovider", tempAudioFile);
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("audio/*");
@@ -605,14 +612,13 @@ public class RvcFragment extends Fragment {
 
         String finalQueueGet = queueGet;
 
-        /*getActivity().runOnUiThread(new Runnable() {
+        requireActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
-                binding.queue.setText("Seu lugar na fila é: " + finalQueueGet);
-                binding.queue.setVisibility(View.VISIBLE);
+                binding.txtQueue.setText("Seu lugar na fila é: " + finalQueueGet);
+                binding.txtQueue.setVisibility(View.VISIBLE);
             }
-        });*/
+        });
 
         if (!voiceValue.isEmpty()) {
             apiRequest.cancelRequest();
@@ -636,9 +642,9 @@ public class RvcFragment extends Fragment {
                     throw new RuntimeException(e);
                 }
 
-                handler.postDelayed(this, 10000);
+                handler.postDelayed(this, 5000);
             }
-        }, 10000);
+        }, 5000);
     }
 
     private void updateSeekBar() {
@@ -664,7 +670,6 @@ public class RvcFragment extends Fragment {
                         binding.userAudioSeekBar.setProgress(progress);
                     }
                 });
-
                 progressAnimator.start();
 
                 binding.userAudioSeekBar.postDelayed(new Runnable() {
@@ -675,41 +680,13 @@ public class RvcFragment extends Fragment {
                 }, 500);
 
             } else {
-
                 if (progressAnimator != null && progressAnimator.isRunning())
                     progressAnimator.cancel();
 
                 currentProgress = generatedAudio.getCurrentPosition();
                 binding.userAudioSeekBar.setProgress(currentProgress);
-
             }
         }
-    }
-
-    private boolean isCacheEmpty() {
-        File cacheDir = getActivity().getCacheDir();
-
-        File[] files = cacheDir.listFiles();
-
-        return files == null || files.length == 0;
-    }
-
-    private void clearCache() {
-        File cacheDir = getActivity().getCacheDir();
-        deleteDir(cacheDir);
-    }
-
-    private boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (String child : children) {
-                boolean success = deleteDir(new File(dir, child));
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-        return dir.delete();
     }
 
     private void mostrarAlertaAudio() {
@@ -735,20 +712,20 @@ public class RvcFragment extends Fragment {
             public void run() {
                 final byte[] audioBytes = Base64.decode(voiceValue, Base64.DEFAULT);
 
-                getActivity().runOnUiThread(new Runnable() {
+                requireActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         binding.cardViewMP.startAnimation(animationCard);
                         binding.cardViewMP.setVisibility(View.VISIBLE);
 
                         try {
-                            FileOutputStream fos = getActivity().openFileOutput("temp_audio.mp3", MODE_PRIVATE);
+                            FileOutputStream fos = requireActivity().openFileOutput("temp_audio.mp3", MODE_PRIVATE);
                             fos.write(audioBytes);
                             fos.close();
 
                             generatedAudio = new MediaPlayer();
                             generatedAudio.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                            generatedAudio.setDataSource(getActivity().getFilesDir() + "/temp_audio.mp3");
+                            generatedAudio.setDataSource(requireActivity().getFilesDir() + "/temp_audio.mp3");
 
                             generatedAudio.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                                 @Override

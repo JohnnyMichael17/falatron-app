@@ -92,9 +92,10 @@ public class TtsFragment extends Fragment {
         voiceList = new VoiceList(
                 this,
                 requireContext(),
+                "https://falatron.com/static/models.json",
                 binding.spinnerCategoria,
                 binding.spinnerVoz,
-                binding.imgModel,
+                binding.imageModel,
                 binding.txtNome,
                 binding.txtAutor,
                 binding.txtDublador,
@@ -245,9 +246,9 @@ public class TtsFragment extends Fragment {
     private void gerarAudio() {
         AlertMessage alertMessage = new AlertMessage(requireContext());
 
-        if (!binding.spinnerCategoria.isSelected()) {
+        if ("Selecione a categoria...".equals(binding.spinnerCategoria.getSelectedItem().toString())) {
             alertMessage.mostrarAlertaCategoria();
-        } else if (!binding.spinnerVoz.isSelected()) {
+        } else if ("Selecione a voz...".equals(binding.spinnerVoz.getSelectedItem().toString())) {
             alertMessage.mostrarAlertaVoz();
         } else if (binding.edtInsiraTexto.getText().toString().length() < 5) {
             alertMessage.mostrarAlertaTexto();
@@ -255,7 +256,7 @@ public class TtsFragment extends Fragment {
             alertMessage.mostrarAlertaInternet();
         } else {
             binding.btnGerarAudio.setVisibility(View.GONE);
-            //loadingProgressBar.setVisibility(View.VISIBLE);
+            binding.loadingProgressBar.setVisibility(View.VISIBLE);
             binding.cardViewMP.setVisibility(View.GONE);
 
             new Thread(new Runnable() {
@@ -265,7 +266,7 @@ public class TtsFragment extends Fragment {
 
                     String responseString;
                     try {
-                        responseString = apiPostTask.execute("https://falatron.com/api/app", convertJsonString(binding.spinnerVoz.toString(), binding.edtInsiraTexto.getText().toString())).get();
+                        responseString = apiPostTask.execute("https://falatron.com/api/app", convertJsonString(binding.spinnerVoz.getSelectedItem().toString(), binding.edtInsiraTexto.getText().toString())).get();
                     } catch (ExecutionException | InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -324,7 +325,7 @@ public class TtsFragment extends Fragment {
 
         String finalQueueGet = queueGet;
 
-        getActivity().runOnUiThread(new Runnable() {
+        requireActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 binding.txtQueue.setText("Seu lugar na fila é: " + finalQueueGet);
@@ -353,9 +354,9 @@ public class TtsFragment extends Fragment {
                 } catch (ExecutionException | InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                handler.postDelayed(this, 10000);
+                handler.postDelayed(this, 5000);
             }
-        }, 10000);
+        }, 5000);
     }
 
     private void makeAudio(String voiceValue) {
@@ -366,20 +367,20 @@ public class TtsFragment extends Fragment {
             public void run() {
                 final byte[] audioBytes = Base64.decode(voiceValue, Base64.DEFAULT);
 
-                getActivity().runOnUiThread(new Runnable() {
+                requireActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         binding.cardViewMP.startAnimation(animationCard);
                         binding.cardViewMP.setVisibility(View.VISIBLE);
 
                         try {
-                            FileOutputStream fos = getActivity().openFileOutput("temp_audio.mp3", MODE_PRIVATE);
+                            FileOutputStream fos = requireActivity().openFileOutput("temp_audio.mp3", MODE_PRIVATE);
                             fos.write(audioBytes);
                             fos.close();
 
                             mediaPlayer = new MediaPlayer();
                             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                            mediaPlayer.setDataSource(getActivity().getFilesDir() + "/temp_audio.mp3");
+                            mediaPlayer.setDataSource(requireActivity().getFilesDir() + "/temp_audio.mp3");
 
                             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                                 @Override
@@ -431,7 +432,7 @@ public class TtsFragment extends Fragment {
 
                 progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
+                    public void onAnimationUpdate(@NonNull ValueAnimator animation) {
                         int progress = (int) animation.getAnimatedValue();
                         binding.seekBar.setProgress(progress);
                     }

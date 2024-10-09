@@ -36,6 +36,7 @@ import java.util.List;
 public class VoiceList {
     private Context context;
     private Fragment fragment;
+    private String url;
     private Spinner spinnerCategoria, spinnerVoz;
     private ImageView imageModel;
     private TextView nameModel, authorModel, dubladorModel;
@@ -43,11 +44,12 @@ public class VoiceList {
     private CardView cardVoz;
     private JSONObject jsonObject;
 
-    public VoiceList(Fragment fragment, Context context, Spinner spinnerCategoria, Spinner spinnerVoz,
+    public VoiceList(Fragment fragment, Context context, String url,Spinner spinnerCategoria, Spinner spinnerVoz,
                      ImageView imageModel, TextView nameModel, TextView authorModel, TextView dubladorModel, CardView cardVoz) {
 
         this.fragment = fragment;
         this.context = context;
+        this.url = url;
         this.spinnerCategoria = spinnerCategoria;
         this.spinnerVoz = spinnerVoz;
         this.imageModel = imageModel;
@@ -196,7 +198,7 @@ public class VoiceList {
 
     private String downloadJson() {
         try {
-            return new JsonDownloader().execute("https://falatron.com/static/models.json").get();
+            return new JsonDownloader().execute(url).get();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

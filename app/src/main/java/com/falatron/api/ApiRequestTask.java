@@ -47,7 +47,6 @@ public class ApiRequestTask extends AsyncTask<String, Void, JSONObject> {
         return jsonResponse;
     }
 
-    // Método para cancelar a requisição
     public void cancelRequest() {
         cancel(true);
     }

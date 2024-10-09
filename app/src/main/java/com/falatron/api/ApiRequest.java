@@ -17,21 +17,15 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import okhttp3.Call;
-
-//------ Classe que faz Requisição na API ------//
 public class ApiRequest extends AsyncTask<String, Void, String> {
     private static final String TAG = "ApiRequest";
 
     private static final int CONNECTION_TIMEOUT = 100000;
 
-
     private OnPostExecuteListener listener;
     private ProgressBar progressBar;
     private Context context;
     private String apiKey;
-
-    private Call currentCall;
 
     public interface OnPostExecuteListener {
         void onPostExecute(String responseString);
@@ -72,9 +66,7 @@ public class ApiRequest extends AsyncTask<String, Void, String> {
             urlConnection.setRequestProperty("x-api-key", apiKey);
             urlConnection.setDoOutput(true);
 
-            // Definir o tempo limite de conexão
             urlConnection.setConnectTimeout(CONNECTION_TIMEOUT);
-            // Definir o tempo limite de leitura
             urlConnection.setReadTimeout(CONNECTION_TIMEOUT);
 
             OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream());
@@ -105,11 +97,8 @@ public class ApiRequest extends AsyncTask<String, Void, String> {
         } catch (IOException e) {
             if (e instanceof java.net.SocketTimeoutException) {
                 Log.e(TAG, "Tempo limite excedido durante a requisição à API: " + e.getMessage());
-                // Lide com o erro de tempo limite aqui (por exemplo, exiba uma mensagem de erro)
-                responseString = null; // Ou outra ação apropriada
             } else {
                 Log.e(TAG, "Erro durante a requisição à API: " + e.getMessage());
-                responseString = null;
             }
         } finally {
             if (urlConnection != null) {
@@ -135,16 +124,9 @@ public class ApiRequest extends AsyncTask<String, Void, String> {
         }
 
         if (responseString == null) {
-            // Lide com erros de rede aqui e exiba mensagens de erro ao usuário
             Toast.makeText(context, "Erro de rede ou sem conexão de internet", Toast.LENGTH_SHORT).show();
         } else if (listener != null) {
             listener.onPostExecute(responseString);
-        }
-    }
-
-    public void cancelCurrentCall() {
-        if (currentCall != null) {
-            currentCall.cancel();
         }
     }
 
