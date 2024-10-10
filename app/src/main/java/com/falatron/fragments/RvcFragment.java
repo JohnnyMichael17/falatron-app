@@ -135,7 +135,7 @@ public class RvcFragment extends Fragment {
 
         voiceList.choiceVoice();
 
-        //audioCompartilhado();
+        audioCompartilhado();
 
         /*binding.btnGravarAudio.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -378,6 +378,8 @@ public class RvcFragment extends Fragment {
             alertMessage.mostrarAlertaCategoria();
         } else if ("Selecione a voz...".equals(binding.spinnerVoz.getSelectedItem().toString())) {
             alertMessage.mostrarAlertaVoz();
+        } else if (binding.cardViewUserAudio.getVisibility() == View.GONE) {
+            alertMessage.mostrarAlertaAudio();
         } else if (!voiceList.testInternet()) {
             alertMessage.mostrarAlertaInternet();
         } else {
@@ -448,7 +450,7 @@ public class RvcFragment extends Fragment {
         return cacheFile;
     }
 
-    /*private void audioCompartilhado() {
+    private void audioCompartilhado() {
         Intent intent = requireActivity().getIntent();
         String action = intent.getAction();
         String type = intent.getType();
@@ -459,22 +461,22 @@ public class RvcFragment extends Fragment {
                 Toast.makeText(requireContext(), "Áudio recebido", Toast.LENGTH_SHORT).show();
 
                 Uri audioUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-                MediaPlayer audioCompartilhado = new MediaPlayer();
+                selectedAudio = new MediaPlayer();
                 try {
-                    audioCompartilhado.setDataSource(requireContext(), audioUri);
-                    audioCompartilhado.prepare();
-                    audioCompartilhado.start();
+                    selectedAudio.setDataSource(requireContext(), audioUri);
+                    selectedAudio.prepare();
 
-                    upload = createTempAudio(audioUri);
+                    binding.cardViewUserAudio.setVisibility(View.VISIBLE);
+                    upload = saveAudioToCache(audioUri);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
-    }*/
+    }
 
     private void startRecording() {
-        audioFilePath = requireContext().getExternalCacheDir().getAbsolutePath() + "/upload.3gp";
+        audioFilePath = requireContext().getExternalCacheDir().getAbsolutePath() + "/upload.mp3";
 
         mediaRecorder = new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -687,19 +689,6 @@ public class RvcFragment extends Fragment {
                 binding.userAudioSeekBar.setProgress(currentProgress);
             }
         }
-    }
-
-    private void mostrarAlertaAudio() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Ops!");
-        builder.setMessage("Por favor envie ou grave um áudio.");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
     }
 
     private void makeAudio(String voiceValue) {

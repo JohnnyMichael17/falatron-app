@@ -54,6 +54,19 @@ public class AlertMessage {
         alertDialog.show();
     }
 
+    public void mostrarAlertaAudio() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Ops!");
+        builder.setMessage("Por favor envie ou grave um áudio.");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
     public void mostrarAlertaInternet() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Sem conexão com a Internet");
