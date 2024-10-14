@@ -16,11 +16,11 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_falatron_round"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Falatron"
+        android:theme="@style/Theme.Splash"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
@@ -49,7 +49,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-7015560586203687~3166166572"/>
+            android:value="ca-app-pub-7015560586203687~3166166572" />
     </application>
 
 </manifest>

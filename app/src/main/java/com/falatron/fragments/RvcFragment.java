@@ -81,7 +81,7 @@ public class RvcFragment extends Fragment {
     private ValueAnimator progressAnimator;
 
     private MediaRecorder mediaRecorder;
-    private boolean isRecording = false;
+    private boolean isRecording = true;
 
     private boolean isPlaying = false;
     private boolean isMuted = false;
@@ -163,7 +163,7 @@ public class RvcFragment extends Fragment {
                 if (isRecording) {
                     binding.btnGravarAudio.setIcon(getResources().getDrawable(R.drawable.baseline_square_24, null));
                     binding.btnGravarAudio.setIconTint(ContextCompat.getColorStateList(requireContext(), R.color.red));
-                    binding.btnGravarAudio.setText(R.string.parar_de_gravar);
+                    binding.btnGravarAudio.setText(R.string.parar_gravacao);
                     startRecording();
                 } else {
                     binding.btnGravarAudio.setIcon(getResources().getDrawable(R.drawable.baseline_mic_24, null));
@@ -178,13 +178,15 @@ public class RvcFragment extends Fragment {
         binding.btnEnviarAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                binding.btnEnviarAudio.setClickable(false);
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("audio/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
                 startActivityForResult(Intent.createChooser(intent, "Selecione um áudio"), 1);
             }
         });
 
-        binding.seekBarPitch.setProgress(0);
+        binding.seekBarPitch.setProgress(13);
         selectedValue = 0;
 
         binding.seekBarPitch.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -218,19 +220,22 @@ public class RvcFragment extends Fragment {
 
                 if (isPlaying) {
                     selectedAudio.pause();
+                    binding.btnUserPlay.setBackgroundResource(R.drawable.bg_play);
                     if (progressAnimator != null && progressAnimator.isRunning()) {
                         progressAnimator.cancel();
                     }
                 } else {
                     selectedAudio.start();
-                    binding.seekBar.setMax(selectedAudio.getDuration());
+                    binding.btnUserPlay.setBackgroundResource(R.drawable.bg_pause);
+                    binding.userSeekBar.setMax(selectedAudio.getDuration());
 
-                    updateSeekBar();
+                    updateUserSeekBar();
                 }
                 selectedAudio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                        binding.seekBar.setProgress(0);
+                        binding.btnUserPlay.setBackgroundResource(R.drawable.bg_play);
+                        binding.userSeekBar.setProgress(0);
                         currentProgress = 0;
                         if (progressAnimator != null && progressAnimator.isRunning()) {
                             progressAnimator.cancel();
@@ -281,7 +286,7 @@ public class RvcFragment extends Fragment {
             }
         });
 
-        binding.userAudioSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        binding.userSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
@@ -410,25 +415,25 @@ public class RvcFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
-            if (requestCode == 1) {
-                userAudio = data.getData();
-            }
+        if (resultCode == RESULT_OK && requestCode == 1 && data != null && data.getData() != null) {
+            userAudio = data.getData();
 
             selectedAudio = new MediaPlayer();
 
-            if (userAudio != null) {
-                try {
-                    selectedAudio.setDataSource(requireContext(), userAudio);
-                    selectedAudio.prepare();
+            try {
+                selectedAudio.setDataSource(requireContext(), userAudio);
+                selectedAudio.prepare();
 
-                    binding.cardViewUserAudio.setVisibility(View.VISIBLE);
+                visibilidadeTomDeVoz();
+                binding.cardViewUserAudio.setVisibility(View.VISIBLE);
+                binding.btnEnviarAudio.setClickable(true);
 
-                    upload = saveAudioToCache(userAudio);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                upload = saveAudioToCache(userAudio);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        } else {
+            binding.btnEnviarAudio.setClickable(true);
         }
     }
 
@@ -466,6 +471,7 @@ public class RvcFragment extends Fragment {
                     selectedAudio.setDataSource(requireContext(), audioUri);
                     selectedAudio.prepare();
 
+                    visibilidadeTomDeVoz();
                     binding.cardViewUserAudio.setVisibility(View.VISIBLE);
                     upload = saveAudioToCache(audioUri);
                 } catch (IOException e) {
@@ -505,6 +511,7 @@ public class RvcFragment extends Fragment {
                 selectedAudio.setDataSource(audioFilePath);
                 selectedAudio.prepare();
 
+                visibilidadeTomDeVoz();
                 binding.cardViewUserAudio.setVisibility(View.VISIBLE);
 
                 Uri audioUri = Uri.fromFile(new File(audioFilePath));
@@ -514,6 +521,25 @@ public class RvcFragment extends Fragment {
             }
 
             Toast.makeText(requireContext(), "Gravação finalizada", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void visibilidadeTomDeVoz() {
+
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.btnGerarAudioRvc.getLayoutParams();
+        params.topMargin = 50;
+        binding.btnGerarAudioRvc.setLayoutParams(params);
+
+        if (binding.txtTom.getVisibility() == View.GONE) {
+            Toast.makeText(requireActivity().getApplicationContext(), "Áudio selecionado", Toast.LENGTH_SHORT).show();
+
+            binding.txtTom.setVisibility(View.VISIBLE);
+            binding.seekBarPitch.setVisibility(View.VISIBLE);
+            binding.txtValor.setVisibility(View.VISIBLE);
+        } else {
+            binding.txtTom.setVisibility(View.GONE);
+            binding.seekBarPitch.setVisibility(View.GONE);
+            binding.txtValor.setVisibility(View.GONE);
         }
     }
 
@@ -649,13 +675,13 @@ public class RvcFragment extends Fragment {
         }, 5000);
     }
 
-    private void updateSeekBar() {
-        if (generatedAudio != null) {
-            final int maxProgress = generatedAudio.getDuration();
+    private void updateUserSeekBar() {
+        if (selectedAudio != null) {
+            final int maxProgress = selectedAudio.getDuration();
 
-            if (generatedAudio.isPlaying()) {
-                final int currentProgress = generatedAudio.getCurrentPosition();
-                binding.userAudioSeekBar.setProgress(currentProgress);
+            if (selectedAudio.isPlaying()) {
+                final int currentProgress = selectedAudio.getCurrentPosition();
+                binding.userSeekBar.setProgress(currentProgress);
 
                 if (progressAnimator != null && progressAnimator.isRunning()) {
                     progressAnimator.cancel();
@@ -669,15 +695,57 @@ public class RvcFragment extends Fragment {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
                         int progress = (int) animation.getAnimatedValue();
-                        binding.userAudioSeekBar.setProgress(progress);
+                        binding.userSeekBar.setProgress(progress);
                     }
                 });
                 progressAnimator.start();
 
-                binding.userAudioSeekBar.postDelayed(new Runnable() {
+                binding.userSeekBar.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        binding.userAudioSeekBar.setProgress(currentProgress);
+                        binding.userSeekBar.setProgress(currentProgress);
+                    }
+                }, 500);
+
+            } else {
+                if (progressAnimator != null && progressAnimator.isRunning())
+                    progressAnimator.cancel();
+
+                currentProgress = selectedAudio.getCurrentPosition();
+                binding.userSeekBar.setProgress(currentProgress);
+            }
+        }
+    }
+
+    private void updateSeekBar() {
+        if (generatedAudio != null) {
+            final int maxProgress = generatedAudio.getDuration();
+
+            if (generatedAudio.isPlaying()) {
+                final int currentProgress = generatedAudio.getCurrentPosition();
+                binding.seekBar.setProgress(currentProgress);
+
+                if (progressAnimator != null && progressAnimator.isRunning()) {
+                    progressAnimator.cancel();
+                }
+
+                progressAnimator = ValueAnimator.ofInt(currentProgress, maxProgress);
+                progressAnimator.setDuration(maxProgress - currentProgress);
+                progressAnimator.setInterpolator(new LinearInterpolator());
+
+                progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        int progress = (int) animation.getAnimatedValue();
+                        binding.seekBar.setProgress(progress);
+                    }
+                });
+                progressAnimator.start();
+
+                binding.seekBar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.seekBar.setProgress(currentProgress);
                     }
                 }, 500);
 
@@ -686,7 +754,7 @@ public class RvcFragment extends Fragment {
                     progressAnimator.cancel();
 
                 currentProgress = generatedAudio.getCurrentPosition();
-                binding.userAudioSeekBar.setProgress(currentProgress);
+                binding.seekBar.setProgress(currentProgress);
             }
         }
     }
@@ -732,7 +800,7 @@ public class RvcFragment extends Fragment {
                             binding.scrollCardView.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    binding.scrollCardView.fullScroll(View.FOCUS_DOWN);
+                                    binding.scrollView.fullScroll(View.FOCUS_DOWN);
                                 }
                             });
 

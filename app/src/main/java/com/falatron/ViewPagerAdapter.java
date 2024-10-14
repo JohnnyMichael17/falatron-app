@@ -1,5 +1,7 @@
 package com.falatron;
 
+import android.view.Menu;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -20,9 +22,9 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             default:
-                return new TtsFragment();
-            case 1:
                 return new RvcFragment();
+            case 1:
+                return new TtsFragment();
             case 2:
                 return new MenuFragment();
         }

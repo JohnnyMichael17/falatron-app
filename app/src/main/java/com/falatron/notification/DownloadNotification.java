@@ -15,7 +15,6 @@ import com.falatron.R;
 
 import java.io.File;
 
-//------ Classe de Notificação quando o Áudio for Baixado ------//
 public class DownloadNotification {
 
     private static final String CHANNEL_ID = "download_channel";

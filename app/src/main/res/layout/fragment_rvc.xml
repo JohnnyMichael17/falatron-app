@@ -48,7 +48,7 @@
                 android:fontFamily="@font/comfortaa_bold"
                 android:text="@string/conversao_de_fala_em_fala"
                 android:textColor="@color/textColor"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/guideline"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -204,9 +204,9 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEnviarAudio"
-                android:layout_width="wrap_content"
+                android:layout_width="155dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/bg_selected"
                 android:fontFamily="@font/comfortaa_semi_bold"
                 android:text="@string/enviar_audio"
@@ -220,7 +220,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGravarAudio"
-                android:layout_width="wrap_content"
+                android:layout_width="155dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_selected"
                 android:fontFamily="@font/comfortaa_semi_bold"
@@ -235,18 +235,52 @@
                 app:layout_constraintEnd_toEndOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@+id/btnEnviarAudio" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewUserAudio"
+            <TextView
+                android:id="@+id/txtTom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="50dp"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/comfortaa_semi_bold"
+                android:text="@string/tom_de_voz"
+                android:textColor="@color/textColor"
                 android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/btnEnviarAudio" />
+
+            <SeekBar
+                android:id="@+id/seekBarPitch"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:max="24"
+                android:progressTint="@color/white"
+                android:thumbTint="@color/white"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/txtTom" />
+
+            <TextView
+                android:id="@+id/txtValor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/comfortaa_semi_bold"
+                android:text="@string/valor"
+                android:textColor="@color/textColor"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/seekBarPitch" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewUserAudio"
+                android:layout_width="244dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/backgroundColor"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/txtValor"
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
-                app:layout_constraintStart_toStartOf="@id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/txtValor">
+                app:layout_constraintTop_toTopOf="@+id/txtTom">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cardViewUserMP"
@@ -272,10 +306,10 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/baseline_volume_up_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/userAudioSeekBar"
+                        app:layout_constraintBottom_toBottomOf="@+id/userSeekBar"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/userAudioSeekBar"
-                        app:layout_constraintTop_toTopOf="@+id/userAudioSeekBar"
+                        app:layout_constraintStart_toEndOf="@+id/userSeekBar"
+                        app:layout_constraintTop_toTopOf="@+id/userSeekBar"
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <Button
@@ -285,9 +319,9 @@
                         android:layout_marginStart="10dp"
                         android:background="@drawable/baseline_volume_off_24"
                         android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="@+id/userAudioSeekBar"
-                        app:layout_constraintStart_toEndOf="@+id/userAudioSeekBar"
-                        app:layout_constraintTop_toTopOf="@+id/userAudioSeekBar"
+                        app:layout_constraintBottom_toBottomOf="@+id/userSeekBar"
+                        app:layout_constraintStart_toEndOf="@+id/userSeekBar"
+                        app:layout_constraintTop_toTopOf="@+id/userSeekBar"
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <Button
@@ -302,7 +336,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <SeekBar
-                        android:id="@+id/userAudioSeekBar"
+                        android:id="@+id/userSeekBar"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -318,8 +352,8 @@
             <Button
                 android:id="@+id/btnGerarAudioRvc"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="50dp"
                 android:background="@drawable/bg_selected"
                 android:fontFamily="@font/comfortaa_semi_bold"
                 android:text="@string/gerar_audio"
@@ -329,7 +363,20 @@
                 app:backgroundTint="@null"
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/loadingProgressBar" />
+                app:layout_constraintTop_toBottomOf="@+id/cardViewUserAudio" />
+
+            <ProgressBar
+                android:id="@+id/loadingProgressBar"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="25dp"
+                android:indeterminate="true"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewUserAudio" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewMP"
@@ -430,19 +477,6 @@
 
             </androidx.cardview.widget.CardView>
 
-            <ProgressBar
-                android:id="@+id/loadingProgressBar"
-                style="@style/Widget.AppCompat.ProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="25dp"
-                android:indeterminate="true"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@+id/cardViewUserAudio"
-                app:layout_constraintStart_toStartOf="@+id/cardViewUserAudio"
-                app:layout_constraintTop_toBottomOf="@+id/cardViewUserAudio" />
-
             <TextView
                 android:id="@+id/txtQueue"
                 android:layout_width="wrap_content"
@@ -453,7 +487,7 @@
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@+id/cardViewUserAudio"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/cardViewUserAudio" />
 
             <TextView
@@ -462,46 +496,11 @@
                 android:fontFamily="@font/comfortaa_bold"
                 android:text="@string/ou"
                 android:textColor="@color/textColor"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 app:layout_constraintBottom_toBottomOf="@+id/btnEnviarAudio"
                 app:layout_constraintEnd_toStartOf="@+id/btnGravarAudio"
                 app:layout_constraintStart_toEndOf="@+id/btnEnviarAudio"
                 app:layout_constraintTop_toTopOf="@+id/btnEnviarAudio" />
-
-            <TextView
-                android:id="@+id/txtTransposicao"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:fontFamily="@font/comfortaa_light"
-                android:text="@string/transposicao_de_nota"
-                android:textColor="@color/textColor"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/btnEnviarAudio" />
-
-            <SeekBar
-                android:id="@+id/seekBarPitch"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="10dp"
-                android:max="24"
-                android:progressTint="@color/white"
-                android:thumbTint="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/txtTransposicao"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/txtTransposicao" />
-
-            <TextView
-                android:id="@+id/txtValor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/comfortaa_light"
-                android:text="@string/valor"
-                android:textColor="@color/textColor"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/seekBarPitch" />
 
             <View
                 android:layout_width="match_parent"

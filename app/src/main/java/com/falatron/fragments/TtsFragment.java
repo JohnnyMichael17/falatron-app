@@ -398,7 +398,7 @@ public class TtsFragment extends Fragment {
                             binding.scrollCardView.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    binding.scrollCardView.fullScroll(View.FOCUS_DOWN);
+                                    binding.scrollView.fullScroll(View.FOCUS_DOWN);
                                 }
                             });
 

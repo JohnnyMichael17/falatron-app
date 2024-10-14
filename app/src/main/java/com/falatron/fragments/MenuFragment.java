@@ -19,6 +19,9 @@ import android.widget.ImageButton;
 
 import com.falatron.R;
 import com.falatron.databinding.FragmentMenuBinding;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 
 public class MenuFragment extends Fragment {
 
@@ -33,6 +36,24 @@ public class MenuFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //------ Colocando anúncio/AD ------//
+        AdView adView1 = new AdView(requireContext());
+        adView1.setAdSize(AdSize.BANNER);
+        adView1.setAdUnitId("ca-app-pub-7015560586203687/3126600134");
+
+        AdView adView2 = new AdView(requireContext());
+        adView2.setAdSize(AdSize.BANNER);
+        adView2.setAdUnitId("ca-app-pub-7015560586203687/9237600961");
+
+        binding.anuncio01.addView(adView1);
+        binding.anuncio02.addView(adView2);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView1.loadAd(adRequest);
+
+        AdRequest adRequest2 = new AdRequest.Builder().build();
+        adView2.loadAd(adRequest2);
 
         binding.btnDiscord.setOnClickListener(new View.OnClickListener() {
             @Override

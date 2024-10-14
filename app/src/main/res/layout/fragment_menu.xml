@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.02" />
+                app:layout_constraintGuide_percent="0.03" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
@@ -46,6 +46,32 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.99" />
 
+            <TextView
+                android:id="@+id/txtRedes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/comfortaa_bold"
+                android:text="Redes Sociais"
+                android:textColor="@color/textColor"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/glTop" />
+
+
+            <View
+                android:id="@+id/viewTop"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@android:color/holo_blue_light"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/txtRedes" />
+
             <Button
                 android:id="@+id/btnPatreon"
                 android:layout_width="380dp"
@@ -59,7 +85,7 @@
                 android:textColor="@color/text_menu_color"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="@id/glTop" />
+                app:layout_constraintTop_toTopOf="@id/viewTop" />
 
             <ImageView
                 android:id="@+id/icPatreon"
@@ -130,23 +156,20 @@
                 android:fontFamily="@font/comfortaa_bold"
                 android:gravity="start|center_vertical"
                 android:padding="2dp"
-                android:text="@string/twitter"
+                android:text="@string/x"
                 android:textAllCaps="false"
                 android:textColor="@color/text_menu_color"
                 android:textSize="15sp"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@+id/view2"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/view2" />
 
             <ImageView
                 android:id="@+id/icTwitter"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginEnd="2dp"
                 android:background="@drawable/ic_twitter"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/btnTwitter"
-                app:layout_constraintEnd_toEndOf="@+id/view2"
+                app:layout_constraintEnd_toEndOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@+id/btnTwitter" />
 
             <View
@@ -157,7 +180,6 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"
                 android:background="@android:color/holo_blue_light"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnTwitter" />
@@ -176,7 +198,7 @@
                 android:textColor="@color/text_menu_color"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
+                app:layout_constraintTop_toBottomOf="@+id/view3" />
 
             <ImageView
                 android:id="@+id/icYouTube"

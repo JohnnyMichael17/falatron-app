@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setTheme(R.style.Theme_Falatron);
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar.getRoot());
 

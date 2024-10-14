@@ -15,14 +15,12 @@ import com.falatron.R;
 
 import java.util.List;
 
-//------ Classe de Notificação quando o Áudio está pronto ------//
 public class AudioNotification {
 
     private static final String CHANNEL_ID = "download_channel";
     private static final int NOTIFICATION_ID = 1;
 
     public static void showAudioNotification(Context context) {
-        // Verifique se o aplicativo não está em primeiro plano
         if (!isAppInForeground(context)) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -31,12 +29,12 @@ public class AudioNotification {
                 notificationManager.createNotificationChannel(channel);
             }
 
-            Intent intent = new Intent(context, MainActivity.class); // Substitua MainActivity pelo nome da sua atividade principal
+            Intent intent = new Intent(context, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_MUTABLE);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                    .setContentTitle("Áudio Gerado com sucesso")
+                    .setContentTitle("Áudio gerado com sucesso")
                     .setContentText("Toque para escutar")
                     .setSmallIcon(R.drawable.baseline_check_24)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
