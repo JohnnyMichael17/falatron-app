@@ -3,18 +3,30 @@ package com.falatron.fragments;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 
+import android.Manifest;
+
 import android.animation.ValueAnimator;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,6 +40,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.falatron.helpers.AlertMessage;
 import com.falatron.R;
@@ -36,6 +49,7 @@ import com.falatron.api.ApiRequest;
 import com.falatron.api.ApiRequestTask;
 import com.falatron.databinding.FragmentTtsBinding;
 import com.falatron.notification.AudioNotification;
+import com.falatron.notification.DownloadNotification;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -43,7 +57,9 @@ import com.google.android.gms.ads.AdView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public class TtsFragment extends Fragment {
@@ -54,10 +70,16 @@ public class TtsFragment extends Fragment {
 
     private MediaPlayer mediaPlayer;
     private ValueAnimator progressAnimator;
+    private String base64Audio;
+
+    private AlertMessage alertMessage;
 
     private boolean isPlaying = false;
     private boolean isMuted = false;
     private int currentProgress;
+
+    private static final int PERMISSION_REQUEST_CODE = 1;
+    private static final int NOTIFICATION_ID = 1;
 
     private Handler handler = new Handler();
 
@@ -88,6 +110,8 @@ public class TtsFragment extends Fragment {
 
         AdRequest adRequest2 = new AdRequest.Builder().build();
         adView2.loadAd(adRequest2);
+
+        alertMessage = new AlertMessage(requireContext());
 
         voiceList = new VoiceList(
                 this,
@@ -205,6 +229,28 @@ public class TtsFragment extends Fragment {
                 }
             }
         });
+
+        binding.btnDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+                } else {
+                    downloadAudio();
+                }
+            }
+        });
+
+        binding.btnCompartilhar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+                } else {
+                    shareAudio();
+                }
+            }
+        });
     }
 
     @Override
@@ -267,10 +313,11 @@ public class TtsFragment extends Fragment {
                     String responseString;
                     try {
                         responseString = apiPostTask.execute("https://falatron.com/api/app", convertJsonString(binding.spinnerVoz.getSelectedItem().toString(), binding.edtInsiraTexto.getText().toString())).get();
-                    } catch (ExecutionException | InterruptedException e) {
+
+                        startPeriodicUpdate(responseString);
+                    } catch (ExecutionException | InterruptedException | JSONException e) {
                         throw new RuntimeException(e);
                     }
-                    startPeriodicUpdate(getTaskId(responseString));
                 }
             }).start();
         }
@@ -293,13 +340,26 @@ public class TtsFragment extends Fragment {
         }
     }
 
-    private String getTaskId(String responseString) {
+    private void startPeriodicUpdate(String responseString) throws JSONException {
+        String taskId = new JSONObject(responseString).getString("task_id");
+
         try {
-            return new JSONObject(responseString).getString("task_id");
-        } catch (JSONException e) {
-            Log.e(TAG, "Erro ao fazer parsing do JSON ou executar a segunda solicitação: " + e.getMessage());
+            getQueue(taskId);
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        return "Erro";
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    getQueue(taskId);
+                } catch (ExecutionException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                handler.postDelayed(this, 5000);
+            }
+        }, 5000);
     }
 
     private void getQueue(final String task_id) throws ExecutionException, InterruptedException {
@@ -339,28 +399,129 @@ public class TtsFragment extends Fragment {
         }
     }
 
-    private void startPeriodicUpdate(String task_id) {
+    private void downloadAudio() {
         try {
-            getQueue(task_id);
-        } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+            byte[] audioData = Base64.decode(base64Audio, Base64.DEFAULT);
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    getQueue(task_id);
-                } catch (ExecutionException | InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                handler.postDelayed(this, 5000);
+            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            String fileName = binding.edtInsiraTexto.getText().toString().toLowerCase().replace(" ", "_") + ".mp3";
+            File file = new File(path, fileName);
+
+            final NotificationManager notificationManager = (NotificationManager) requireActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (file.exists()) {
+
+                androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+                dialogBuilder.setTitle("Arquivo já existe");
+                dialogBuilder.setMessage("Deseja substituir o arquivo existente?");
+                dialogBuilder.setPositiveButton("Substituir", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            FileOutputStream outputStream = new FileOutputStream(file);
+                            outputStream.write(audioData);
+                            outputStream.close();
+                            DownloadNotification.showDownloadNotification(requireContext(), file.getAbsolutePath());
+                            Toast.makeText(requireActivity().getApplicationContext(), "Áudio baixado com sucesso!", Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                dialogBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        notificationManager.cancel(NOTIFICATION_ID);
+                    }
+                });
+
+                AlertDialog alertDialog = dialogBuilder.create();
+                alertDialog.show();
+
+            } else {
+
+                FileOutputStream outputStream = new FileOutputStream(file);
+                outputStream.write(audioData);
+                outputStream.close();
+                DownloadNotification.showDownloadNotification(requireContext(), file.getAbsolutePath());
+                Toast.makeText(requireActivity().getApplicationContext(), "Áudio baixado com sucesso!", Toast.LENGTH_SHORT).show();
+
             }
-        }, 5000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void shareAudio() {
+        File tempAudioFile = new File(requireActivity().getFilesDir(), "temp_audio.mp3");
+        Uri audioUri = FileProvider.getUriForFile(requireContext(), requireActivity().getPackageName() + ".fileprovider", tempAudioFile);
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("audio/*");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, audioUri);
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(Intent.createChooser(shareIntent, "Compartilhar via"));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            } else {
+                alertMessage.mostrarAlertaDePermissao();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private void updateSeekBar() {
+        if (mediaPlayer != null) {
+            final int maxProgress = mediaPlayer.getDuration();
+
+            if (mediaPlayer.isPlaying()) {
+                final int currentProgress = mediaPlayer.getCurrentPosition();
+                binding.seekBar.setProgress(currentProgress);
+
+                if (progressAnimator != null && progressAnimator.isRunning()) {
+                    progressAnimator.cancel();
+                }
+
+                progressAnimator = ValueAnimator.ofInt(currentProgress, maxProgress);
+                progressAnimator.setDuration(maxProgress - currentProgress);
+                progressAnimator.setInterpolator(new LinearInterpolator());
+
+                progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(@NonNull ValueAnimator animation) {
+                        int progress = (int) animation.getAnimatedValue();
+                        binding.seekBar.setProgress(progress);
+                    }
+                });
+
+                progressAnimator.start();
+
+                binding.seekBar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.seekBar.setProgress(currentProgress);
+                    }
+                }, 500);
+            } else {
+                if (progressAnimator != null && progressAnimator.isRunning()) {
+                    progressAnimator.cancel();
+                }
+                currentProgress = mediaPlayer.getCurrentPosition();
+                binding.seekBar.setProgress(currentProgress);
+
+            }
+        }
     }
 
     private void makeAudio(String voiceValue) {
+
         Animation animationCard = AnimationUtils.loadAnimation(requireActivity(), R.anim.animation_card);
+        base64Audio = voiceValue;
 
         new Thread(new Runnable() {
             @Override
@@ -412,49 +573,6 @@ public class TtsFragment extends Fragment {
                 });
             }
         }).start();
-    }
-
-    private void updateSeekBar() {
-        if (mediaPlayer != null) {
-            final int maxProgress = mediaPlayer.getDuration();
-
-            if (mediaPlayer.isPlaying()) {
-                final int currentProgress = mediaPlayer.getCurrentPosition();
-                binding.seekBar.setProgress(currentProgress);
-
-                if (progressAnimator != null && progressAnimator.isRunning()) {
-                    progressAnimator.cancel();
-                }
-
-                progressAnimator = ValueAnimator.ofInt(currentProgress, maxProgress);
-                progressAnimator.setDuration(maxProgress - currentProgress);
-                progressAnimator.setInterpolator(new LinearInterpolator());
-
-                progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(@NonNull ValueAnimator animation) {
-                        int progress = (int) animation.getAnimatedValue();
-                        binding.seekBar.setProgress(progress);
-                    }
-                });
-
-                progressAnimator.start();
-
-                binding.seekBar.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        binding.seekBar.setProgress(currentProgress);
-                    }
-                }, 500);
-            } else {
-                if (progressAnimator != null && progressAnimator.isRunning()) {
-                    progressAnimator.cancel();
-                }
-                currentProgress = mediaPlayer.getCurrentPosition();
-                binding.seekBar.setProgress(currentProgress);
-
-            }
-        }
     }
 
     @Override

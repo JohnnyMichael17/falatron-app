@@ -2,14 +2,13 @@ package com.falatron;
 
 import android.Manifest;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -33,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar.getRoot());
 
-        solicitarPermissoes();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            solicitarPermissoes();
+        }
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this);
         binding.viewPager.setAdapter(viewPagerAdapter);
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void solicitarPermissoes() {
         String[] permissions = {
                 Manifest.permission.ACCESS_NETWORK_STATE,
@@ -118,32 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.RECORD_AUDIO
         };
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
-        }
+        ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            // Verifica se todas as permissões foram concedidas
-            boolean allGranted = true;
-            for (int grantResult : grantResults) {
-                if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                    allGranted = false;
-                    break;
-                }
-            }
-
-            if (allGranted) {
-                // Todas as permissões foram concedidas
-                // Faça o que for necessário aqui após a concessão das permissões
-            } else {
-                // Alguma permissão foi negada
-                // Trate o caso de permissão negada, se necessário
-            }
-        }
-    }
 }

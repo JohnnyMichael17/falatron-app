@@ -74,6 +74,7 @@ public class RvcFragment extends Fragment {
     private MediaPlayer selectedAudio;
     private MediaPlayer generatedAudio;
     private Uri userAudio;
+    private AlertMessage alertMessage;
 
     private int selectedValue;
     private File upload;
@@ -119,6 +120,8 @@ public class RvcFragment extends Fragment {
 
         AdRequest adRequest2 = new AdRequest.Builder().build();
         adView2.loadAd(adRequest2);
+
+        alertMessage = new AlertMessage(requireContext());
 
         voiceList = new VoiceList(
                 this,
@@ -377,8 +380,6 @@ public class RvcFragment extends Fragment {
     }
 
     private void gerarAudio() {
-        AlertMessage alertMessage = new AlertMessage(requireContext());
-
         if ("Selecione a categoria...".equals(binding.spinnerCategoria.getSelectedItem().toString())) {
             alertMessage.mostrarAlertaCategoria();
         } else if ("Selecione a voz...".equals(binding.spinnerVoz.getSelectedItem().toString())) {
@@ -402,13 +403,45 @@ public class RvcFragment extends Fragment {
                     try {
                         responseString = apiPostTask.execute("https://falatron.com/api/app/rvc/", binding.spinnerVoz.getSelectedItem().toString(), selectedValue, upload).get();
 
-                    } catch (ExecutionException | InterruptedException e) {
+                        startPeriodicUpdate(responseString);
+                    } catch (ExecutionException | InterruptedException | JSONException e) {
                         throw new RuntimeException(e);
                     }
-                    startPeriodicUpdate(getTaskId(responseString));
                 }
             }).start();
         }
+    }
+
+    private void playAudio(MediaPlayer mediaPlayer) {
+        if (isPlaying) {
+            mediaPlayer.pause();
+            binding.btnPlay.setBackgroundResource(R.drawable.bg_play);
+            if (progressAnimator != null && progressAnimator.isRunning()) {
+                progressAnimator.cancel();
+            }
+        } else {
+            mediaPlayer.start();
+            binding.btnPlay.setBackgroundResource(R.drawable.bg_pause);
+            binding.seekBar.setMax(mediaPlayer.getDuration());
+
+            updateSeekBar();
+        }
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                binding.btnPlay.setBackgroundResource(R.drawable.bg_play);
+                binding.seekBar.setProgress(0);
+                currentProgress = 0;
+                if (progressAnimator != null && progressAnimator.isRunning()) {
+                    progressAnimator.cancel();
+                }
+                isPlaying = false;
+
+                mediaPlayer.seekTo(0);
+            }
+        });
+
+        isPlaying = !isPlaying;
     }
 
     @Override
@@ -608,13 +641,26 @@ public class RvcFragment extends Fragment {
 
     }
 
-    private String getTaskId(String responseString) {
+    private void startPeriodicUpdate(String responseString) throws JSONException {
+        String taskId = new JSONObject(responseString).getString("task_id");
+
         try {
-            return new JSONObject(responseString).getString("task_id");
-        } catch (JSONException e) {
-            Log.e(TAG, "Erro ao fazer parsing do JSON ou executar a segunda solicitação: " + e.getMessage());
+            getQueue(taskId);
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        return "Erro";
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    getQueue(taskId);
+                } catch (ExecutionException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                handler.postDelayed(this, 5000);
+            }
+        }, 5000);
     }
 
     private void getQueue(final String task_id) throws ExecutionException, InterruptedException {
@@ -652,27 +698,6 @@ public class RvcFragment extends Fragment {
             apiRequest.cancelRequest();
             makeAudio(voiceValue);
         }
-    }
-
-    private void startPeriodicUpdate(String task_id) {
-        try {
-            getQueue(task_id);
-        } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    getQueue(task_id);
-                } catch (ExecutionException | InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                handler.postDelayed(this, 5000);
-            }
-        }, 5000);
     }
 
     private void updateUserSeekBar() {

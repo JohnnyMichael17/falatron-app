@@ -89,4 +89,17 @@ public class AlertMessage {
 
         builder.create().show();
     }
+
+    public void mostrarAlertaDePermissao() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Permissão Negada");
+        builder.setMessage("A permissão é necessária para realizar esta ação. Por favor, conceda a permissão nas configurações do aplicativo.");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
 }
