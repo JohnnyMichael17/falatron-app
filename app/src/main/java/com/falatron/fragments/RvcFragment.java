@@ -4,23 +4,27 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 
+import android.Manifest;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -66,15 +70,15 @@ public class RvcFragment extends Fragment {
 
     private FragmentRvcBinding binding;
 
-    private VoiceList voiceList;
-
     private static final int NOTIFICATION_ID = 1;
+    private static final int REQUEST_AUDIO_PERMISSIONS = 100;
+    private static final int REQUEST_STORAGE_PERMISSION = 200;
+
+    private Boolean verificarFile = false;
 
     private String base64Audio;
     private MediaPlayer selectedAudio;
     private MediaPlayer generatedAudio;
-    private Uri userAudio;
-    private AlertMessage alertMessage;
 
     private int selectedValue;
     private File upload;
@@ -88,9 +92,9 @@ public class RvcFragment extends Fragment {
     private boolean isMuted = false;
     private int currentProgress;
 
-    private Handler handler = new Handler();
-
     private String audioFilePath;
+
+    private final Handler handler = new Handler();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -121,22 +125,19 @@ public class RvcFragment extends Fragment {
         AdRequest adRequest2 = new AdRequest.Builder().build();
         adView2.loadAd(adRequest2);
 
-        alertMessage = new AlertMessage(requireContext());
-
-        voiceList = new VoiceList(
-                this,
+        VoiceList voiceList = new VoiceList(
                 requireContext(),
-                "https://falatron.com/static/sovits.json",
                 binding.spinnerCategoria,
                 binding.spinnerVoz,
                 binding.imageModel,
+                binding.imageIcLogo,
                 binding.txtNome,
                 binding.txtAutor,
                 binding.txtDublador,
                 binding.cardViewModel
         );
 
-        voiceList.choiceVoice();
+        voiceList.choiceVoice("https://falatron.com/static/sovits.json");
 
         audioCompartilhado();
 
@@ -163,29 +164,42 @@ public class RvcFragment extends Fragment {
             @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onClick(View v) {
-                if (isRecording) {
-                    binding.btnGravarAudio.setIcon(getResources().getDrawable(R.drawable.baseline_square_24, null));
-                    binding.btnGravarAudio.setIconTint(ContextCompat.getColorStateList(requireContext(), R.color.red));
-                    binding.btnGravarAudio.setText(R.string.parar_gravacao);
-                    startRecording();
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_STORAGE_PERMISSION);
                 } else {
-                    binding.btnGravarAudio.setIcon(getResources().getDrawable(R.drawable.baseline_mic_24, null));
-                    binding.btnGravarAudio.setIconTint(ContextCompat.getColorStateList(requireContext(), R.color.white));
-                    binding.btnGravarAudio.setText(R.string.gravar_audio);
-                    stopRecording();
+                    if (isRecording) {
+                        binding.btnGravarAudio.setIcon(getResources().getDrawable(R.drawable.baseline_square_24, null));
+                        binding.btnGravarAudio.setIconTint(ContextCompat.getColorStateList(requireContext(), R.color.red));
+                        binding.btnGravarAudio.setText(R.string.parar_gravacao);
+                        startRecording();
+                    } else {
+                        binding.btnGravarAudio.setIcon(getResources().getDrawable(R.drawable.baseline_mic_24, null));
+                        binding.btnGravarAudio.setIconTint(ContextCompat.getColorStateList(requireContext(), R.color.white));
+                        binding.btnGravarAudio.setText(R.string.gravar_audio);
+                        stopRecording();
+                    }
+                    isRecording = !isRecording;
                 }
-                isRecording = !isRecording;
             }
         });
 
         binding.btnEnviarAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.btnEnviarAudio.setClickable(false);
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("audio/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
-                startActivityForResult(Intent.createChooser(intent, "Selecione um áudio"), 1);
+
+                String[] storagePermissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(requireActivity(), storagePermissions, REQUEST_STORAGE_PERMISSION);
+                } else {
+                    binding.btnEnviarAudio.setClickable(false);
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("audio/*");
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+                    startActivityForResult(Intent.createChooser(intent, "Selecione um áudio"), 1);
+                }
             }
         });
 
@@ -213,7 +227,7 @@ public class RvcFragment extends Fragment {
         binding.btnGerarAudioRvc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gerarAudio();
+                gerarAudio(voiceList);
             }
         });
 
@@ -331,7 +345,16 @@ public class RvcFragment extends Fragment {
         binding.btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadAudio();
+                verificarFile = true;
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        downloadAudio();
+                    } else {
+                        ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
+                    }
+                } else {
+                    downloadAudio();
+                }
             }
         });
 
@@ -379,7 +402,9 @@ public class RvcFragment extends Fragment {
         view.setLayoutParams(params);
     }
 
-    private void gerarAudio() {
+    private void gerarAudio(VoiceList voiceList) {
+        AlertMessage alertMessage = new AlertMessage(requireContext());
+
         if ("Selecione a categoria...".equals(binding.spinnerCategoria.getSelectedItem().toString())) {
             alertMessage.mostrarAlertaCategoria();
         } else if ("Selecione a voz...".equals(binding.spinnerVoz.getSelectedItem().toString())) {
@@ -412,44 +437,12 @@ public class RvcFragment extends Fragment {
         }
     }
 
-    private void playAudio(MediaPlayer mediaPlayer) {
-        if (isPlaying) {
-            mediaPlayer.pause();
-            binding.btnPlay.setBackgroundResource(R.drawable.bg_play);
-            if (progressAnimator != null && progressAnimator.isRunning()) {
-                progressAnimator.cancel();
-            }
-        } else {
-            mediaPlayer.start();
-            binding.btnPlay.setBackgroundResource(R.drawable.bg_pause);
-            binding.seekBar.setMax(mediaPlayer.getDuration());
-
-            updateSeekBar();
-        }
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                binding.btnPlay.setBackgroundResource(R.drawable.bg_play);
-                binding.seekBar.setProgress(0);
-                currentProgress = 0;
-                if (progressAnimator != null && progressAnimator.isRunning()) {
-                    progressAnimator.cancel();
-                }
-                isPlaying = false;
-
-                mediaPlayer.seekTo(0);
-            }
-        });
-
-        isPlaying = !isPlaying;
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && requestCode == 1 && data != null && data.getData() != null) {
-            userAudio = data.getData();
+            Uri userAudio = data.getData();
 
             selectedAudio = new MediaPlayer();
 
@@ -558,7 +551,6 @@ public class RvcFragment extends Fragment {
     }
 
     private void visibilidadeTomDeVoz() {
-
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.btnGerarAudioRvc.getLayoutParams();
         params.topMargin = 50;
         binding.btnGerarAudioRvc.setLayoutParams(params);
@@ -569,10 +561,6 @@ public class RvcFragment extends Fragment {
             binding.txtTom.setVisibility(View.VISIBLE);
             binding.seekBarPitch.setVisibility(View.VISIBLE);
             binding.txtValor.setVisibility(View.VISIBLE);
-        } else {
-            binding.txtTom.setVisibility(View.GONE);
-            binding.seekBarPitch.setVisibility(View.GONE);
-            binding.txtValor.setVisibility(View.GONE);
         }
     }
 
@@ -638,7 +626,40 @@ public class RvcFragment extends Fragment {
         shareIntent.putExtra(Intent.EXTRA_STREAM, audioUri);
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(Intent.createChooser(shareIntent, "Compartilhar via"));
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_AUDIO_PERMISSIONS:
+                boolean permissionToRecordAccepted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                if (permissionToRecordAccepted) {
+                    startRecording();
+                } else {
+                    //alertMessage.mostrarAlertaDePermissao();
+                }
+                break;
+
+            case REQUEST_STORAGE_PERMISSION:
+                boolean permissionToReadAccepted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                boolean permissionToWriteAccepted = grantResults.length > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
+                if (permissionToReadAccepted && permissionToWriteAccepted) {
+                    if (verificarFile) {
+                        downloadAudio();
+                    } else {
+                        binding.btnEnviarAudio.setClickable(true);
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("audio/*");
+                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+                        startActivityForResult(Intent.createChooser(intent, "Selecione um áudio"), 1);
+                    }
+                } else {
+                    //alertMessage.mostrarAlertaDePermissao();
+                }
+                break;
+        }
     }
 
     private void startPeriodicUpdate(String responseString) throws JSONException {
@@ -785,7 +806,6 @@ public class RvcFragment extends Fragment {
     }
 
     private void makeAudio(String voiceValue) {
-
         Animation animationCard = AnimationUtils.loadAnimation(requireActivity(), R.anim.animation_card);
         base64Audio = voiceValue;
 
@@ -822,7 +842,7 @@ public class RvcFragment extends Fragment {
                                 }
                             });
 
-                            binding.scrollCardView.post(new Runnable() {
+                            binding.teste.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     binding.scrollView.fullScroll(View.FOCUS_DOWN);

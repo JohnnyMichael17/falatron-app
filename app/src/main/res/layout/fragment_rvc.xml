@@ -22,6 +22,7 @@
         app:layout_constraintTop_toBottomOf="@+id/anuncio01">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/teste"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/backgroundColor2">
@@ -117,7 +118,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/falatron_logo_app" />
+                            app:srcCompat="@drawable/falatron" />
 
                         <TextView
                             android:id="@+id/txtNome"
@@ -275,12 +276,12 @@
                 android:id="@+id/cardViewUserAudio"
                 android:layout_width="244dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/backgroundColor"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/txtValor"
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/txtTom">
+                app:layout_constraintTop_toBottomOf="@+id/btnEnviarAudio">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cardViewUserMP"
@@ -511,6 +512,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardViewMP" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

@@ -11,7 +11,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -35,34 +34,31 @@ import java.util.List;
 
 public class VoiceList {
     private Context context;
-    private Fragment fragment;
-    private String url;
     private Spinner spinnerCategoria, spinnerVoz;
-    private ImageView imageModel;
+    private ImageView imageModel, imageIcLogo;
     private TextView nameModel, authorModel, dubladorModel;
     private String selectedCategory, selectedName;
     private CardView cardVoz;
     private JSONObject jsonObject;
 
-    public VoiceList(Fragment fragment, Context context, String url,Spinner spinnerCategoria, Spinner spinnerVoz,
-                     ImageView imageModel, TextView nameModel, TextView authorModel, TextView dubladorModel, CardView cardVoz) {
+    public VoiceList(Context context, Spinner spinnerCategoria, Spinner spinnerVoz,
+                     ImageView imageModel, ImageView imageIcLogo, TextView nameModel, TextView authorModel, TextView dubladorModel, CardView cardVoz) {
 
-        this.fragment = fragment;
         this.context = context;
-        this.url = url;
         this.spinnerCategoria = spinnerCategoria;
         this.spinnerVoz = spinnerVoz;
         this.imageModel = imageModel;
+        this.imageIcLogo = imageIcLogo;
         this.nameModel = nameModel;
         this.authorModel = authorModel;
         this.dubladorModel = dubladorModel;
         this.cardVoz = cardVoz;
     }
 
-    public void choiceVoice() {
+    public void choiceVoice(String url) {
         try {
             if (testInternet()) {
-                jsonObject = new JSONObject(downloadJson());
+                jsonObject = new JSONObject(downloadJson(url));
                 updateJsonInAssets(context);
             } else {
                 jsonObject = new JSONObject(loadJSONFromAsset());
@@ -169,12 +165,14 @@ public class VoiceList {
                     }
 
                     if (!image.isEmpty()) {
-                        Glide.with(fragment)
+                        imageIcLogo.setVisibility(View.GONE);
+
+                        Glide.with(context)
                                 .load(image)
                                 .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                                 .into(imageModel);
                     } else {
-                        imageModel.setVisibility(View.GONE);
+                        imageIcLogo.setVisibility(View.VISIBLE);
                     }
 
                     cardVoz.setVisibility(View.VISIBLE);
@@ -196,7 +194,7 @@ public class VoiceList {
         return false;
     }
 
-    private String downloadJson() {
+    private String downloadJson(String url) {
         try {
             return new JsonDownloader().execute(url).get();
         } catch (Exception e) {

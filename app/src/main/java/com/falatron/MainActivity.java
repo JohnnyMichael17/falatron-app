@@ -2,14 +2,12 @@ package com.falatron;
 
 import android.Manifest;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.MotionEvent;
@@ -32,9 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar.getRoot());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            solicitarPermissoes();
-        }
+        solicitarPermissoes();
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this);
         binding.viewPager.setAdapter(viewPagerAdapter);
@@ -60,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        SharedPreferences sharedPreferences;
-
         binding.cardTermos.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -69,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        sharedPreferences = getSharedPreferences("Minhas preferências", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Minhas preferências", Context.MODE_PRIVATE);
         boolean userAlreadyPressedOk = sharedPreferences.getBoolean("userPressedOk", false);
 
         if (userAlreadyPressedOk) {
@@ -106,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void solicitarPermissoes() {
         String[] permissions = {
                 Manifest.permission.ACCESS_NETWORK_STATE,

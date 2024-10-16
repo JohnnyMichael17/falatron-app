@@ -16,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -66,19 +67,15 @@ public class TtsFragment extends Fragment {
 
     private FragmentTtsBinding binding;
 
-    private VoiceList voiceList;
-
     private MediaPlayer mediaPlayer;
     private ValueAnimator progressAnimator;
     private String base64Audio;
-
-    private AlertMessage alertMessage;
 
     private boolean isPlaying = false;
     private boolean isMuted = false;
     private int currentProgress;
 
-    private static final int PERMISSION_REQUEST_CODE = 1;
+    private static final int REQUEST_STORAGE_PERMISSION = 100;
     private static final int NOTIFICATION_ID = 1;
 
     private Handler handler = new Handler();
@@ -111,22 +108,19 @@ public class TtsFragment extends Fragment {
         AdRequest adRequest2 = new AdRequest.Builder().build();
         adView2.loadAd(adRequest2);
 
-        alertMessage = new AlertMessage(requireContext());
-
-        voiceList = new VoiceList(
-                this,
+        VoiceList voiceList = new VoiceList(
                 requireContext(),
-                "https://falatron.com/static/models.json",
                 binding.spinnerCategoria,
                 binding.spinnerVoz,
                 binding.imageModel,
+                binding.imageIcLogo,
                 binding.txtNome,
                 binding.txtAutor,
                 binding.txtDublador,
                 binding.cardViewModel
         );
 
-        voiceList.choiceVoice();
+        voiceList.choiceVoice("https://falatron.com/static/models.json");
 
         binding.edtInsiraTexto.addTextChangedListener(new TextWatcher() {
             @Override
@@ -147,7 +141,7 @@ public class TtsFragment extends Fragment {
         binding.btnGerarAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gerarAudio();
+                gerarAudio(voiceList);
             }
         });
 
@@ -233,8 +227,12 @@ public class TtsFragment extends Fragment {
         binding.btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        downloadAudio();
+                    } else {
+                        ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
+                    }
                 } else {
                     downloadAudio();
                 }
@@ -244,11 +242,7 @@ public class TtsFragment extends Fragment {
         binding.btnCompartilhar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
-                } else {
-                    shareAudio();
-                }
+                shareAudio();
             }
         });
     }
@@ -289,7 +283,7 @@ public class TtsFragment extends Fragment {
         view.setLayoutParams(params);
     }
 
-    private void gerarAudio() {
+    private void gerarAudio(VoiceList voiceList) {
         AlertMessage alertMessage = new AlertMessage(requireContext());
 
         if ("Selecione a categoria...".equals(binding.spinnerCategoria.getSelectedItem().toString())) {
@@ -464,14 +458,14 @@ public class TtsFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == PERMISSION_REQUEST_CODE) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_STORAGE_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                downloadAudio();
             } else {
-                alertMessage.mostrarAlertaDePermissao();
+                //alertMessage.mostrarAlertaDePermissao();
             }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
@@ -519,7 +513,6 @@ public class TtsFragment extends Fragment {
     }
 
     private void makeAudio(String voiceValue) {
-
         Animation animationCard = AnimationUtils.loadAnimation(requireActivity(), R.anim.animation_card);
         base64Audio = voiceValue;
 
@@ -556,7 +549,7 @@ public class TtsFragment extends Fragment {
                                 }
                             });
 
-                            binding.scrollCardView.post(new Runnable() {
+                            binding.scrollView.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     binding.scrollView.fullScroll(View.FOCUS_DOWN);
