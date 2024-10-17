@@ -4,12 +4,16 @@ import android.Manifest;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar.getRoot());
 
-        solicitarPermissoes();
+        //solicitarPermissoes();
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this);
         binding.viewPager.setAdapter(viewPagerAdapter);
@@ -74,8 +78,21 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     int secondsLeft = (int) (millisUntilFinished / 1000);
-                    String message = "Aguarde " + secondsLeft + " segundos e pressione OK para utilizar o site.";
-                    binding.txtPermissao.setText(message);
+                    String message = "Aguarde " + secondsLeft + " segundos e pressione OK para utilizar o aplicativo.";
+
+                    SpannableString spannable = new SpannableString(message);
+
+                    int start = message.indexOf(String.valueOf(secondsLeft));
+                    int end = start + String.valueOf(secondsLeft).length();
+
+                    spannable.setSpan(
+                            new ForegroundColorSpan(ContextCompat.getColor(MainActivity.this, R.color.blue)),
+                            start,
+                            end,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    );
+
+                    binding.txtPermissao.setText(spannable);
                 }
 
                 @Override

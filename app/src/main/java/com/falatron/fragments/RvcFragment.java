@@ -455,6 +455,8 @@ public class RvcFragment extends Fragment {
                 binding.btnEnviarAudio.setClickable(true);
 
                 upload = saveAudioToCache(userAudio);
+
+                Toast.makeText(requireContext(), "Áudio selecionado", Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -508,32 +510,42 @@ public class RvcFragment extends Fragment {
     }
 
     private void startRecording() {
-        audioFilePath = requireContext().getExternalCacheDir().getAbsolutePath() + "/upload.mp3";
+        if (mediaRecorder == null) {
+            audioFilePath = requireContext().getExternalCacheDir().getAbsolutePath() + "/upload.mp3";
 
-        mediaRecorder = new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        mediaRecorder.setOutputFile(audioFilePath);
+            mediaRecorder = new MediaRecorder();
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            mediaRecorder.setOutputFile(audioFilePath);
 
-        try {
-            mediaRecorder.prepare();
-            mediaRecorder.start();
-            Toast.makeText(requireContext(), "Gravação iniciada", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                mediaRecorder.prepare();
+                mediaRecorder.start();
+                isRecording = true;
+                binding.btnGravarAudio.setClickable(false);
+                handler.postDelayed(() -> binding.btnGravarAudio.setClickable(true), 500);
+                Toast.makeText(requireContext(), "Gravação iniciada", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void stopRecording() {
         if (mediaRecorder != null) {
             mediaRecorder.stop();
+            mediaRecorder.reset();
             mediaRecorder.release();
             mediaRecorder = null;
+            isRecording = false;
 
             selectedAudio = new MediaPlayer();
 
             try {
+                binding.btnGravarAudio.setClickable(false);
+                handler.postDelayed(() -> binding.btnGravarAudio.setClickable(true), 500);
+
                 selectedAudio.setDataSource(audioFilePath);
                 selectedAudio.prepare();
 
@@ -556,8 +568,6 @@ public class RvcFragment extends Fragment {
         binding.btnGerarAudioRvc.setLayoutParams(params);
 
         if (binding.txtTom.getVisibility() == View.GONE) {
-            Toast.makeText(requireActivity().getApplicationContext(), "Áudio selecionado", Toast.LENGTH_SHORT).show();
-
             binding.txtTom.setVisibility(View.VISIBLE);
             binding.seekBarPitch.setVisibility(View.VISIBLE);
             binding.txtValor.setVisibility(View.VISIBLE);
@@ -852,6 +862,7 @@ public class RvcFragment extends Fragment {
                             generatedAudio.prepareAsync();
                             handler.removeCallbacksAndMessages(null);
 
+                            Toast.makeText(requireContext(), "Audio Gerado", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

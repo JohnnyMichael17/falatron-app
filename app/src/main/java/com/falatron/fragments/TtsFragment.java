@@ -181,26 +181,22 @@ public class TtsFragment extends Fragment {
             }
         });
 
-        // Atualiza a barra de progressão do áudio (seekBar)
         binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
-                    // Se o usuário moveu a SeekBar, atualize a posição do áudio
                     mediaPlayer.seekTo(progress);
                 }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // Callback quando o usuário toca na SeekBar
                 mediaPlayer.pause();
                 progressAnimator.pause();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                // Callback quando o usuário solta a SeekBar
                 mediaPlayer.start();
                 updateSeekBar();
                 binding.btnPlay.setBackgroundResource(R.drawable.bg_pause);
@@ -559,6 +555,7 @@ public class TtsFragment extends Fragment {
                             mediaPlayer.prepareAsync();
                             handler.removeCallbacksAndMessages(null);
 
+                            Toast.makeText(requireContext(), "Audio Gerado", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

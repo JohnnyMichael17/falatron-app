@@ -252,12 +252,13 @@
                 android:id="@+id/seekBarPitch"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:max="24"
                 android:progressTint="@color/white"
                 android:thumbTint="@color/white"
                 android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtTom" />
 
             <TextView
