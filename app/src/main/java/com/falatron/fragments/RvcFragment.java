@@ -110,11 +110,11 @@ public class RvcFragment extends Fragment {
         //------ Colocando anúncio/AD ------//
         AdView adView1 = new AdView(requireContext());
         adView1.setAdSize(AdSize.BANNER);
-        adView1.setAdUnitId("ca-app-pub-7015560586203687/3126600134");
+        adView1.setAdUnitId("ca-app-pub-7015560586203687/1804303811");
 
         AdView adView2 = new AdView(requireContext());
         adView2.setAdSize(AdSize.BANNER);
-        adView2.setAdUnitId("ca-app-pub-7015560586203687/9237600961");
+        adView2.setAdUnitId("ca-app-pub-7015560586203687/6641725770");
 
         binding.anuncio01.addView(adView1);
         binding.anuncio02.addView(adView2);
@@ -520,11 +520,12 @@ public class RvcFragment extends Fragment {
             mediaRecorder.setOutputFile(audioFilePath);
 
             try {
+                binding.btnGravarAudio.setClickable(false);
+                handler.postDelayed(() -> binding.btnGravarAudio.setClickable(true), 500);
+                
                 mediaRecorder.prepare();
                 mediaRecorder.start();
                 isRecording = true;
-                binding.btnGravarAudio.setClickable(false);
-                handler.postDelayed(() -> binding.btnGravarAudio.setClickable(true), 500);
                 Toast.makeText(requireContext(), "Gravação iniciada", Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();

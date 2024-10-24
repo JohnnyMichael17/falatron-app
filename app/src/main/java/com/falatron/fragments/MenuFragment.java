@@ -40,11 +40,11 @@ public class MenuFragment extends Fragment {
         //------ Colocando anúncio/AD ------//
         AdView adView1 = new AdView(requireContext());
         adView1.setAdSize(AdSize.BANNER);
-        adView1.setAdUnitId("ca-app-pub-7015560586203687/3126600134");
+        adView1.setAdUnitId("ca-app-pub-7015560586203687/7571664063");
 
         AdView adView2 = new AdView(requireContext());
         adView2.setAdSize(AdSize.BANNER);
-        adView2.setAdUnitId("ca-app-pub-7015560586203687/9237600961");
+        adView2.setAdUnitId("ca-app-pub-7015560586203687/3472636950");
 
         binding.anuncio01.addView(adView1);
         binding.anuncio02.addView(adView2);

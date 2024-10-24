@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar.getRoot());
 
-        //solicitarPermissoes();
+        solicitarPermissoes();
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this);
         binding.viewPager.setAdapter(viewPagerAdapter);
